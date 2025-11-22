@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Order, Customer, Vehicle, Employee } from '../../types';
+import type { Order, Customer, Vehicle, Employee } from '../../types.ts';
 import { Edit, ExternalLink } from 'lucide-react';
 
 interface OrdersListProps {

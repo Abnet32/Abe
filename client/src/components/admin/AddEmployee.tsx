@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Employee } from '../../types';
+import type { Employee } from '../../types.ts';
 import { AlertCircle } from 'lucide-react';
 
 interface AddEmployeeProps {

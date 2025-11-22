@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Customer } from '../../types';
+import type { Customer } from '../../types.ts';
 
 interface AddCustomerProps {
   onSubmit: (customer: Omit<Customer, 'id' | 'addedDate'>) => void;

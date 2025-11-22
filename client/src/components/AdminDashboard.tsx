@@ -15,7 +15,7 @@ import {
   LogOut,
   Home
 } from 'lucide-react';
-import { Employee, Customer, Vehicle, Service, Order, InventoryItem } from '../types';
+import type { Employee, Customer, Vehicle, Service, Order, InventoryItem } from '../types.ts';
 
 // Sub-components
 import DashboardHome from './admin/DashboardHome';

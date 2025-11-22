@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Activity, Disc, Move, Settings, Battery, Thermometer, Zap, Wrench, Droplet } from 'lucide-react';
-import { Order, Employee, Customer, Service } from '../../types';
+import type { Order, Employee, Customer, Service } from '../../types.ts';
 
 interface DashboardHomeProps {
   orders: Order[];

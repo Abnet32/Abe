@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Employee } from '../../types';
+import type { Employee } from '../../types.ts';
 import { Edit, Trash2 } from 'lucide-react';
 
 interface EmployeesListProps {

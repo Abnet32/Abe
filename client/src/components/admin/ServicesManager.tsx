@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Service } from '../../types';
-import { Edit, Trash2, Plus } from 'lucide-react';
+import type { Service } from '../../types.ts';
+import { Edit, Trash2 } from 'lucide-react';
 
 interface ServicesManagerProps {
   services: Service[];

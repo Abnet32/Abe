@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { InventoryItem } from '../../types';
+import type { InventoryItem } from '../../types.ts';
 import { Package, Plus, AlertTriangle, Search, Edit, Trash2 } from 'lucide-react';
 
 interface InventoryManagerProps {

@@ -1,8 +1,9 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Sparkles, User, Bot } from 'lucide-react';
-import { ChatMessage } from '../types';
+import React, { useState, useRef, useEffect } from "react";
+import { MessageSquare, X, Send, Sparkles, User, Bot } from "lucide-react";
+import type { ChatMessage } from "../types"; // <-- type-only import
 import { generateMechanicResponse } from "../lib/gemini";
+
 
 interface ChatWidgetProps {
   isOpen: boolean;

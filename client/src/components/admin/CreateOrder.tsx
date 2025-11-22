@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Customer, Vehicle, Service, Order, Employee } from '../../types';
-import { Search, CheckCircle, Plus, X } from 'lucide-react';
+import type { Customer, Vehicle, Service, Order, Employee } from '../../types.ts';
+import { Search, CheckCircle, X } from 'lucide-react';
 
 interface CreateOrderProps {
   customers: Customer[];

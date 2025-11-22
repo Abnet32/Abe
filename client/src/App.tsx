@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Services from "./components/Services";
-import QualitySection from "./components/QualitySection";
-import WhyChooseUs from "./components/WhyChooseUs";
-import LeaderBanner from "./components/LeaderBanner";
-import Footer from "./components/Footer";
-import ChatWidget from "./components/ChatWidget";
-import Login from "./components/Login";
-import AdminDashboard from "./components/AdminDashboard";
-import ContactPage from "./components/ContactPage";
-import AboutPage from "./components/AboutPage";
-import ServicesPage from "./components/ServicesPage";
+import Header from "./components/Header.tsx";
+import Hero from "./components/Hero.tsx";
+import About from "./components/About.tsx";
+import Services from "./components/Services.tsx";
+import QualitySection from "./components/QualitySection.tsx";
+import WhyChooseUs from "./components/WhyChooseUs.tsx";
+import LeaderBanner from "./components/LeaderBanner.tsx";
+import Footer from "./components/Footer.tsx";
+import ChatWidget from "./components/ChatWidget.tsx";
+import Login from "./components/Login.tsx";
+import AdminDashboard from "./components/AdminDashboard.tsx";
+import ContactPage from "./components/ContactPage.tsx";
+import AboutPage from "./components/AboutPage.tsx";
+import ServicesPage from "./components/ServicesPage.tsx";
 
 type ViewState = "home" | "login" | "admin" | "contact" | "about" | "services";
 

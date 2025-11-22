@@ -1,7 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
 // Initialize safely - in a real app, you'd handle missing keys more gracefully in the UI
 const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;

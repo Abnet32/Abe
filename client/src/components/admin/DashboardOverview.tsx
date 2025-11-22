@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Users, ClipboardList, Wrench, TrendingUp } from 'lucide-react';
-import { Order, Employee, Customer, Service } from '../../types';
+import type { Order, Employee, Customer, Service } from '../../types.ts';
 
 interface DashboardOverviewProps {
   orders: Order[];

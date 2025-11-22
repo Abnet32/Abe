@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Clock, Menu, X, Phone, Mail } from 'lucide-react';
+import { Clock, Menu, X, Phone } from 'lucide-react';
 
 interface HeaderProps {
   currentView: 'home' | 'login' | 'admin' | 'contact' | 'about' | 'services';

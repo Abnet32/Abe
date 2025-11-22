@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Order, Customer } from '../../types';
+import type { Order, Customer } from '../../types.ts';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
 
 interface AppointmentCalendarProps {

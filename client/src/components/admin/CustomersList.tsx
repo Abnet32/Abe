@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Customer } from '../../types';
+import type { Customer } from '../../types.ts';
 import { Edit, Trash2, ExternalLink } from 'lucide-react';
 
 interface CustomersListProps {
