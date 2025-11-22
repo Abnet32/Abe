@@ -5,8 +5,6 @@
   font-family: "Outfit", sans-serif;
 }
 
-
-
 :root {
   --brand-red: #e61c23;
   --brand-blue: #0b132b;
@@ -49,7 +47,8 @@
   font-family: "Benaiah", "Noto Serif Ethiopic", serif;
 }
 @layer base {
-  a,button {
+  a,
+  button {
     @apply cursor-pointer;
   }
 }

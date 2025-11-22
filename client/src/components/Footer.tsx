@@ -33,7 +33,7 @@ const Footer: React.FC<FooterProps> = ({
     >
       {/* Appointment Banner */}
       {showAppointmentBanner && (
-        <div className="container mx-auto px-4 -translate-y-1/2">
+        <div className="container mx-auto px-4 m-10 -translate-y-1/2">
           <div className="bg-brand-red p-8 md:p-12 flex flex-col md:flex-row justify-between items-center shadow-2xl">
             <div className="mb-6 md:mb-0">
               <h3 className="text-2xl md:text-4xl font-normal font-heading mb-2">
@@ -100,7 +100,10 @@ const Footer: React.FC<FooterProps> = ({
           <div className="md:col-span-1">
             <div className="flex items-baseline gap-2 mb-6">
               {/* Logo Text kept in Amharic */}
-              <h4 className="text-white font-bold font-amharic text-2xl">
+              <h4
+                className="text-white font-bold font-amharic text-2xl cursor-pointer"
+                onClick={() => onNavigate("home")}
+              >
                 <span className="text-brand-red">አቤ</span> ጋራዥ
               </h4>
             </div>
