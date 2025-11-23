@@ -8,6 +8,12 @@ import {
   IconTyre,
   IconPaint,
 } from "./Icons";
+import one from "../assets/1.avif";
+import two from "../assets/2.avif";
+import three from "../assets/3.avif";
+import four from "../assets/4.avif";
+import five from "../assets/5.avif";
+import six from "../assets/6.avif";
 
 interface ServicesProps {
   onLearnMore: (prompt: string) => void;
@@ -73,8 +79,7 @@ const Services: React.FC<ServicesProps> = ({ onLearnMore }) => {
   const services: ServiceData[] = [
     {
       title: "Performance Upgrade",
-      image:
-        "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80",
+      image: one,
       prompt:
         "I'm interested in upgrading my car's performance. Can you explain what options you offer, such as engine tuning, turbo upgrades, or suspension modifications?",
       shortDescription: "Unlock your car's true potential with expert tuning.",
@@ -91,8 +96,7 @@ const Services: React.FC<ServicesProps> = ({ onLearnMore }) => {
     },
     {
       title: "Transmission Services",
-      image:
-        "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=600&q=80",
+      image: two,
       prompt:
         "I need help with my transmission. What kind of services do you offer for gear issues?",
       shortDescription: "Smooth shifting and drivetrain maintenance.",
@@ -109,8 +113,7 @@ const Services: React.FC<ServicesProps> = ({ onLearnMore }) => {
     },
     {
       title: "Brake Repair & Service",
-      image:
-        "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=600&q=80",
+      image: three,
       prompt:
         "My brakes are making noise. How much for an inspection and repair?",
       shortDescription:
@@ -128,8 +131,7 @@ const Services: React.FC<ServicesProps> = ({ onLearnMore }) => {
     },
     {
       title: "Engine Service & Repair",
-      image:
-        "https://images.unsplash.com/photo-1552930294-6b595f4c2974?auto=format&fit=crop&w=600&q=80",
+      image: four,
       prompt: "My check engine light is on. Can you diagnose the issue?",
       shortDescription: "Expert diagnostics and complete engine overhauls.",
       extendedDescription:
@@ -145,8 +147,7 @@ const Services: React.FC<ServicesProps> = ({ onLearnMore }) => {
     },
     {
       title: "Tyre & Wheels",
-      image:
-        "https://images.unsplash.com/photo-1578844251758-2f71da64c96f?auto=format&fit=crop&w=600&q=80",
+      image: five,
       prompt: "I need new tires or an alignment. What are your prices?",
       shortDescription:
         "Maximize traction and fuel economy with our tire services.",
@@ -163,8 +164,7 @@ const Services: React.FC<ServicesProps> = ({ onLearnMore }) => {
     },
     {
       title: "Denting & Painting",
-      image:
-        "https://images.unsplash.com/photo-1746079074371-e28f14c76e37?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: six,
       prompt: "Can you give me a quote for removing dents and painting my car?",
       shortDescription:
         "Restore your car's aesthetic appeal to showroom quality.",

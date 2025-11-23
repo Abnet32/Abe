@@ -1,87 +1,265 @@
-
-import React, { useState } from 'react';
-import { 
-  LayoutDashboard, 
-  ClipboardList, 
-  PlusCircle, 
-  Users, 
-  UserPlus, 
-  Wrench, 
+import React, { useState } from "react";
+import {
+  LayoutDashboard,
+  ClipboardList,
+  PlusCircle,
+  Users,
+  UserPlus,
+  Wrench,
   Menu,
   TrendingUp,
   CalendarDays,
   Package,
   X,
   LogOut,
-  Home
-} from 'lucide-react';
-import type { Employee, Customer, Vehicle, Service, Order, InventoryItem } from '../types.ts';
+  Home,
+} from "lucide-react";
+import type {
+  Employee,
+  Customer,
+  Vehicle,
+  Service,
+  Order,
+  InventoryItem,
+} from "../types.ts";
 
 // Sub-components
-import DashboardHome from './admin/DashboardHome';
-import DashboardOverview from './admin/DashboardOverview';
-import OrdersList from './admin/OrdersList';
-import CreateOrder from './admin/CreateOrder';
-import EmployeesList from './admin/EmployeesList';
-import AddEmployee from './admin/AddEmployee';
-import CustomersList from './admin/CustomersList';
-import AddCustomer from './admin/AddCustomer';
-import ServicesManager from './admin/ServicesManager';
-import InventoryManager from './admin/InventoryManager';
-import AppointmentCalendar from './admin/AppointmentCalendar';
-import Footer from './Footer';
+import DashboardHome from "./admin/DashboardHome";
+import DashboardOverview from "./admin/DashboardOverview";
+import OrdersList from "./admin/OrdersList";
+import CreateOrder from "./admin/CreateOrder";
+import EmployeesList from "./admin/EmployeesList";
+import AddEmployee from "./admin/AddEmployee";
+import CustomersList from "./admin/CustomersList";
+import AddCustomer from "./admin/AddCustomer";
+import ServicesManager from "./admin/ServicesManager";
+import InventoryManager from "./admin/InventoryManager";
+import AppointmentCalendar from "./admin/AppointmentCalendar";
+import Footer from "./Footer";
 
-type AdminView = 'dashboard' | 'overview' | 'orders' | 'new-order' | 'calendar' | 'inventory' | 'employees' | 'add-employee' | 'edit-employee' | 'customers' | 'add-customer' | 'edit-customer' | 'services';
+type AdminView =
+  | "dashboard"
+  | "overview"
+  | "orders"
+  | "new-order"
+  | "calendar"
+  | "inventory"
+  | "employees"
+  | "add-employee"
+  | "edit-employee"
+  | "customers"
+  | "add-customer"
+  | "edit-customer"
+  | "services";
 
 interface AdminDashboardProps {
   onNavigate: (view: any, sectionId?: string) => void;
   onLogout: () => void;
 }
 
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, onLogout }) => {
-  const [currentView, setCurrentView] = useState<AdminView>('dashboard');
+const AdminDashboard: React.FC<AdminDashboardProps> = ({
+  onNavigate,
+  onLogout,
+}) => {
+  const [currentView, setCurrentView] = useState<AdminView>("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // --- Mock Database State ---
-  
+
   const [employees, setEmployees] = useState<Employee[]>([
-    { id: 1, firstName: 'Admin', lastName: 'User', email: 'admin@autorex.com', phone: '555-0101', role: 'Admin', active: true, addedDate: '2023-01-01' },
-    { id: 2, firstName: 'John', lastName: 'Mechanic', email: 'john@autorex.com', phone: '555-0102', role: 'Employee', active: true, addedDate: '2023-02-15' },
+    {
+      id: 1,
+      firstName: "Admin",
+      lastName: "User",
+      email: "admin@autorex.com",
+      phone: "555-0101",
+      role: "Admin",
+      active: true,
+      addedDate: "2023-01-01",
+    },
+    {
+      id: 2,
+      firstName: "John",
+      lastName: "Mechanic",
+      email: "john@autorex.com",
+      phone: "555-0102",
+      role: "Employee",
+      active: true,
+      addedDate: "2023-02-15",
+    },
   ]);
 
   const [customers, setCustomers] = useState<Customer[]>([
-    { id: 1, firstName: 'Jasmine', lastName: 'Albeshir', email: 'jasmine@gmail.com', phone: '240-835-487', active: true, addedDate: '2023-05-20', hash: 'cust_123' },
-    { id: 2, firstName: 'Adugna', lastName: 'Bekele', email: 'test@evangadi.com', phone: '202-386-2702', active: true, addedDate: '2023-06-10', hash: 'cust_456' },
+    {
+      id: 1,
+      firstName: "Jasmine",
+      lastName: "Albeshir",
+      email: "jasmine@gmail.com",
+      phone: "240-835-487",
+      active: true,
+      addedDate: "2023-05-20",
+      hash: "cust_123",
+    },
+    {
+      id: 2,
+      firstName: "Adugna",
+      lastName: "Bekele",
+      email: "test@evangadi.com",
+      phone: "202-386-2702",
+      active: true,
+      addedDate: "2023-06-10",
+      hash: "cust_456",
+    },
   ]);
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([
-    { id: 1, customerId: 1, year: '2020', make: 'BMW', model: 'X7', type: 'SUV', mileage: '12000', tag: '0101AD', serial: 'BM123456', color: 'Gold' },
-    { id: 2, customerId: 2, year: '2022', make: 'Tesla', model: 'Model S', type: 'Sedan', mileage: '10000', tag: '9890Ab2', serial: 'TS999888', color: 'Silver' },
+    {
+      id: 1,
+      customerId: 1,
+      year: "2020",
+      make: "BMW",
+      model: "X7",
+      type: "SUV",
+      mileage: "12000",
+      tag: "0101AD",
+      serial: "BM123456",
+      color: "Gold",
+    },
+    {
+      id: 2,
+      customerId: 2,
+      year: "2022",
+      make: "Tesla",
+      model: "Model S",
+      type: "Sedan",
+      mileage: "10000",
+      tag: "9890Ab2",
+      serial: "TS999888",
+      color: "Silver",
+    },
   ]);
 
   const [services, setServices] = useState<Service[]>([
-    { id: 1, name: 'Oil Change', description: 'Synthetic oil change and filter replacement' },
-    { id: 2, name: 'Brake Repair', description: 'Brake pad replacement and rotor resurfacing' },
-    { id: 3, name: 'Tire Rotation', description: 'Rotate tires to ensure even wear' },
-    { id: 4, name: 'Engine Tune-up', description: 'Spark plugs, air filter, and system check' },
-    { id: 5, name: 'Battery Service', description: 'Battery check, charging system analysis and replacement' },
-    { id: 6, name: 'AC Recharge', description: 'Air conditioning system diagnostic and refrigerant refill' },
-    { id: 7, name: 'Wheel Alignment', description: 'Computerized wheel alignment for better handling' },
-    { id: 8, name: 'Suspension', description: 'Struts, shocks, and suspension component repair' },
-    { id: 9, name: 'Detailing', description: 'Complete interior and exterior professional detailing' },
+    {
+      id: 1,
+      name: "Oil Change",
+      description: "Synthetic oil change and filter replacement",
+    },
+    {
+      id: 2,
+      name: "Brake Repair",
+      description: "Brake pad replacement and rotor resurfacing",
+    },
+    {
+      id: 3,
+      name: "Tire Rotation",
+      description: "Rotate tires to ensure even wear",
+    },
+    {
+      id: 4,
+      name: "Engine Tune-up",
+      description: "Spark plugs, air filter, and system check",
+    },
+    {
+      id: 5,
+      name: "Battery Service",
+      description: "Battery check, charging system analysis and replacement",
+    },
+    {
+      id: 6,
+      name: "AC Recharge",
+      description: "Air conditioning system diagnostic and refrigerant refill",
+    },
+    {
+      id: 7,
+      name: "Wheel Alignment",
+      description: "Computerized wheel alignment for better handling",
+    },
+    {
+      id: 8,
+      name: "Suspension",
+      description: "Struts, shocks, and suspension component repair",
+    },
+    {
+      id: 9,
+      name: "Detailing",
+      description: "Complete interior and exterior professional detailing",
+    },
   ]);
 
   const [orders, setOrders] = useState<Order[]>([
-    { id: 101, customerId: 1, vehicleId: 1, employeeId: 2, date: '2023-10-25', status: 'In Progress', description: 'Check engine light is on', serviceIds: [1, 4], hash: 'ord_abc', estimatedCompletionDate: '2023-10-27' },
-    { id: 102, customerId: 2, vehicleId: 2, employeeId: 2, date: '2023-10-26', status: 'Received', description: 'Regular maintenance', serviceIds: [3], hash: 'ord_xyz', estimatedCompletionDate: '2023-10-28' },
+    {
+      id: 101,
+      customerId: 1,
+      vehicleId: 1,
+      employeeId: 2,
+      date: "2023-10-25",
+      status: "In Progress",
+      description: "Check engine light is on",
+      serviceIds: [1, 4],
+      hash: "ord_abc",
+      estimatedCompletionDate: "2023-10-27",
+    },
+    {
+      id: 102,
+      customerId: 2,
+      vehicleId: 2,
+      employeeId: 2,
+      date: "2023-10-26",
+      status: "Received",
+      description: "Regular maintenance",
+      serviceIds: [3],
+      hash: "ord_xyz",
+      estimatedCompletionDate: "2023-10-28",
+    },
   ]);
 
   const [inventory, setInventory] = useState<InventoryItem[]>([
-    { id: 1, name: 'Synthetic Oil 5W-30', partNumber: 'OIL-5W30-SYN', category: 'Fluids', quantity: 45, price: 24.99, minStockLevel: 10 },
-    { id: 2, name: 'Oil Filter BMW', partNumber: 'FLT-BMW-X7', category: 'Engine', quantity: 12, price: 15.50, minStockLevel: 5 },
-    { id: 3, name: 'Ceramic Brake Pads', partNumber: 'BRK-PAD-001', category: 'Brakes', quantity: 8, price: 89.99, minStockLevel: 4 },
-    { id: 4, name: 'Air Filter', partNumber: 'AIR-FLT-GEN', category: 'Engine', quantity: 20, price: 12.99, minStockLevel: 8 },
-    { id: 5, name: 'Spark Plug Iridium', partNumber: 'SPK-NGK-900', category: 'Engine', quantity: 4, price: 18.50, minStockLevel: 12 },
+    {
+      id: 1,
+      name: "Synthetic Oil 5W-30",
+      partNumber: "OIL-5W30-SYN",
+      category: "Fluids",
+      quantity: 45,
+      price: 24.99,
+      minStockLevel: 10,
+    },
+    {
+      id: 2,
+      name: "Oil Filter BMW",
+      partNumber: "FLT-BMW-X7",
+      category: "Engine",
+      quantity: 12,
+      price: 15.5,
+      minStockLevel: 5,
+    },
+    {
+      id: 3,
+      name: "Ceramic Brake Pads",
+      partNumber: "BRK-PAD-001",
+      category: "Brakes",
+      quantity: 8,
+      price: 89.99,
+      minStockLevel: 4,
+    },
+    {
+      id: 4,
+      name: "Air Filter",
+      partNumber: "AIR-FLT-GEN",
+      category: "Engine",
+      quantity: 20,
+      price: 12.99,
+      minStockLevel: 8,
+    },
+    {
+      id: 5,
+      name: "Spark Plug Iridium",
+      partNumber: "SPK-NGK-900",
+      category: "Engine",
+      quantity: 4,
+      price: 18.5,
+      minStockLevel: 12,
+    },
   ]);
 
   // --- Selection State for Editing ---
@@ -91,162 +269,258 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, onLogout })
   // --- Actions ---
 
   // Employee Actions
-  const handleAddEmployee = (empData: Omit<Employee, 'id' | 'addedDate'>) => {
+  const handleAddEmployee = (empData: Omit<Employee, "id" | "addedDate">) => {
     const newEmp: Employee = {
       ...empData,
       id: Date.now(),
-      addedDate: new Date().toISOString().split('T')[0],
+      addedDate: new Date().toISOString().split("T")[0],
     };
     setEmployees([...employees, newEmp]);
-    setCurrentView('employees');
+    setCurrentView("employees");
   };
 
   const handleEditEmployee = (emp: Employee) => {
     setEditingEmployee(emp);
-    setCurrentView('edit-employee');
+    setCurrentView("edit-employee");
   };
 
-  const handleUpdateEmployee = (empData: Omit<Employee, 'id' | 'addedDate'>) => {
+  const handleUpdateEmployee = (
+    empData: Omit<Employee, "id" | "addedDate">
+  ) => {
     if (!editingEmployee) return;
-    setEmployees(employees.map(e => e.id === editingEmployee.id ? { ...e, ...empData } : e));
+    setEmployees(
+      employees.map((e) =>
+        e.id === editingEmployee.id ? { ...e, ...empData } : e
+      )
+    );
     setEditingEmployee(null);
-    setCurrentView('employees');
+    setCurrentView("employees");
   };
 
   const handleDeleteEmployee = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this employee?')) {
-      setEmployees(employees.filter(e => e.id !== id));
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      setEmployees(employees.filter((e) => e.id !== id));
     }
   };
 
   // Customer Actions
-  const handleAddCustomer = (custData: Omit<Customer, 'id' | 'addedDate'>) => {
+  const handleAddCustomer = (custData: Omit<Customer, "id" | "addedDate">) => {
     const newCust: Customer = {
       ...custData,
       id: Date.now(),
-      addedDate: new Date().toISOString().split('T')[0],
-      hash: Math.random().toString(36).substring(7)
+      addedDate: new Date().toISOString().split("T")[0],
+      hash: Math.random().toString(36).substring(7),
     };
     setCustomers([...customers, newCust]);
-    setCurrentView('customers');
+    setCurrentView("customers");
   };
 
   const handleEditCustomer = (cust: Customer) => {
     setEditingCustomer(cust);
-    setCurrentView('edit-customer');
+    setCurrentView("edit-customer");
   };
 
-  const handleUpdateCustomer = (custData: Omit<Customer, 'id' | 'addedDate'>) => {
+  const handleUpdateCustomer = (
+    custData: Omit<Customer, "id" | "addedDate">
+  ) => {
     if (!editingCustomer) return;
-    setCustomers(customers.map(c => c.id === editingCustomer.id ? { ...c, ...custData } : c));
+    setCustomers(
+      customers.map((c) =>
+        c.id === editingCustomer.id ? { ...c, ...custData } : c
+      )
+    );
     setEditingCustomer(null);
-    setCurrentView('customers');
+    setCurrentView("customers");
   };
 
   const handleDeleteCustomer = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this customer?')) {
-      setCustomers(customers.filter(c => c.id !== id));
+    if (window.confirm("Are you sure you want to delete this customer?")) {
+      setCustomers(customers.filter((c) => c.id !== id));
     }
   };
 
   // Service Actions
-  const addService = (srv: Omit<Service, 'id'>) => {
+  const addService = (srv: Omit<Service, "id">) => {
     setServices([...services, { ...srv, id: Date.now() }]);
   };
 
-  const updateService = (id: number, srv: Omit<Service, 'id'>) => {
-    setServices(services.map(s => s.id === id ? { ...s, ...srv } : s));
+  const updateService = (id: number, srv: Omit<Service, "id">) => {
+    setServices(services.map((s) => (s.id === id ? { ...s, ...srv } : s)));
   };
 
   const deleteService = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this service?')) {
-      setServices(services.filter(s => s.id !== id));
+    if (window.confirm("Are you sure you want to delete this service?")) {
+      setServices(services.filter((s) => s.id !== id));
     }
   };
 
   // Vehicle & Order Actions
-  const addVehicle = (veh: Omit<Vehicle, 'id'>) => {
+  const addVehicle = (veh: Omit<Vehicle, "id">) => {
     setVehicles([...vehicles, { ...veh, id: Date.now() }]);
   };
 
-  const addOrder = (ord: Omit<Order, 'id' | 'date' | 'status'>) => {
+  const addOrder = (ord: Omit<Order, "id" | "date" | "status">) => {
     const newOrder: Order = {
       ...ord,
       id: Date.now(),
-      date: new Date().toISOString().split('T')[0],
-      status: 'Received',
-      hash: Math.random().toString(36).substring(7)
+      date: new Date().toISOString().split("T")[0],
+      status: "Received",
+      hash: Math.random().toString(36).substring(7),
     };
     setOrders([...orders, newOrder]);
-    setCurrentView('orders');
+    setCurrentView("orders");
   };
 
-  const updateOrderStatus = (orderId: number, status: Order['status']) => {
-    setOrders(orders.map(o => o.id === orderId ? { ...o, status } : o));
+  const updateOrderStatus = (orderId: number, status: Order["status"]) => {
+    setOrders(orders.map((o) => (o.id === orderId ? { ...o, status } : o)));
   };
 
   // Inventory Actions
-  const addInventoryItem = (item: Omit<InventoryItem, 'id'>) => {
+  const addInventoryItem = (item: Omit<InventoryItem, "id">) => {
     setInventory([...inventory, { ...item, id: Date.now() }]);
   };
 
-  const updateInventoryItem = (id: number, itemData: Partial<InventoryItem>) => {
-    setInventory(inventory.map(i => i.id === id ? { ...i, ...itemData } : i));
+  const updateInventoryItem = (
+    id: number,
+    itemData: Partial<InventoryItem>
+  ) => {
+    setInventory(
+      inventory.map((i) => (i.id === id ? { ...i, ...itemData } : i))
+    );
   };
 
   const deleteInventoryItem = (id: number) => {
-    if(window.confirm('Delete this inventory item?')) {
-      setInventory(inventory.filter(i => i.id !== id));
+    if (window.confirm("Delete this inventory item?")) {
+      setInventory(inventory.filter((i) => i.id !== id));
     }
   };
-
 
   // --- Navigation ---
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-    { id: 'overview', label: 'Overview', icon: <TrendingUp size={18} /> },
-    { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={18} /> },
-    { id: 'orders', label: 'Orders', icon: <ClipboardList size={18} /> },
-    { id: 'new-order', label: 'New Order', icon: <PlusCircle size={18} /> },
-    { id: 'inventory', label: 'Inventory', icon: <Package size={18} /> },
-    { id: 'add-employee', label: 'Add Employee', icon: <UserPlus size={18} /> },
-    { id: 'employees', label: 'Employees', icon: <Users size={18} /> },
-    { id: 'add-customer', label: 'Add Customer', icon: <UserPlus size={18} /> },
-    { id: 'customers', label: 'Customers', icon: <Users size={18} /> },
-    { id: 'services', label: 'Services', icon: <Wrench size={18} /> },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard size={18} />,
+    },
+    { id: "overview", label: "Overview", icon: <TrendingUp size={18} /> },
+    { id: "calendar", label: "Calendar", icon: <CalendarDays size={18} /> },
+    { id: "orders", label: "Orders", icon: <ClipboardList size={18} /> },
+    { id: "new-order", label: "New Order", icon: <PlusCircle size={18} /> },
+    { id: "inventory", label: "Inventory", icon: <Package size={18} /> },
+    { id: "add-employee", label: "Add Employee", icon: <UserPlus size={18} /> },
+    { id: "employees", label: "Employees", icon: <Users size={18} /> },
+    { id: "add-customer", label: "Add Customer", icon: <UserPlus size={18} /> },
+    { id: "customers", label: "Customers", icon: <Users size={18} /> },
+    { id: "services", label: "Services", icon: <Wrench size={18} /> },
   ];
 
   const renderView = () => {
     switch (currentView) {
-      case 'dashboard':
-        return <DashboardHome orders={orders} employees={employees} customers={customers} services={services} />;
-      case 'overview':
-        return <DashboardOverview orders={orders} employees={employees} customers={customers} services={services} />;
-      case 'calendar':
+      case "dashboard":
+        return (
+          <DashboardHome
+            orders={orders}
+            employees={employees}
+            customers={customers}
+            services={services}
+          />
+        );
+      case "overview":
+        return (
+          <DashboardOverview
+            orders={orders}
+            employees={employees}
+            customers={customers}
+            services={services}
+          />
+        );
+      case "calendar":
         return <AppointmentCalendar orders={orders} customers={customers} />;
-      case 'orders':
-        return <OrdersList orders={orders} customers={customers} vehicles={vehicles} employees={employees} onUpdateStatus={updateOrderStatus} />;
-      case 'new-order':
-        return <CreateOrder customers={customers} vehicles={vehicles} services={services} employees={employees} onSubmit={addOrder} onAddVehicle={addVehicle} />;
-      case 'inventory':
-        return <InventoryManager inventory={inventory} onAdd={addInventoryItem} onUpdate={updateInventoryItem} onDelete={deleteInventoryItem} />;
-      case 'employees':
-        return <EmployeesList employees={employees} onEdit={handleEditEmployee} onDelete={handleDeleteEmployee} />;
-      case 'add-employee':
+      case "orders":
+        return (
+          <OrdersList
+            orders={orders}
+            customers={customers}
+            vehicles={vehicles}
+            employees={employees}
+            onUpdateStatus={updateOrderStatus}
+          />
+        );
+      case "new-order":
+        return (
+          <CreateOrder
+            customers={customers}
+            vehicles={vehicles}
+            services={services}
+            employees={employees}
+            onSubmit={addOrder}
+            onAddVehicle={addVehicle}
+          />
+        );
+      case "inventory":
+        return (
+          <InventoryManager
+            inventory={inventory}
+            onAdd={addInventoryItem}
+            onUpdate={updateInventoryItem}
+            onDelete={deleteInventoryItem}
+          />
+        );
+      case "employees":
+        return (
+          <EmployeesList
+            employees={employees}
+            onEdit={handleEditEmployee}
+            onDelete={handleDeleteEmployee}
+          />
+        );
+      case "add-employee":
         return <AddEmployee onSubmit={handleAddEmployee} />;
-      case 'edit-employee':
-        return <AddEmployee onSubmit={handleUpdateEmployee} initialData={editingEmployee || undefined} isEditing />;
-      case 'customers':
-        return <CustomersList customers={customers} onEdit={handleEditCustomer} onDelete={handleDeleteCustomer} />;
-      case 'add-customer':
+      case "edit-employee":
+        return (
+          <AddEmployee
+            onSubmit={handleUpdateEmployee}
+            initialData={editingEmployee || undefined}
+            isEditing
+          />
+        );
+      case "customers":
+        return (
+          <CustomersList
+            customers={customers}
+            onEdit={handleEditCustomer}
+            onDelete={handleDeleteCustomer}
+          />
+        );
+      case "add-customer":
         return <AddCustomer onSubmit={handleAddCustomer} />;
-      case 'edit-customer':
-        return <AddCustomer onSubmit={handleUpdateCustomer} initialData={editingCustomer || undefined} isEditing />;
-      case 'services':
-        return <ServicesManager services={services} onAdd={addService} onUpdate={updateService} onDelete={deleteService} />;
+      case "edit-customer":
+        return (
+          <AddCustomer
+            onSubmit={handleUpdateCustomer}
+            initialData={editingCustomer || undefined}
+            isEditing
+          />
+        );
+      case "services":
+        return (
+          <ServicesManager
+            services={services}
+            onAdd={addService}
+            onUpdate={updateService}
+            onDelete={deleteService}
+          />
+        );
       default:
-        return <DashboardHome orders={orders} employees={employees} customers={customers} services={services} />;
+        return (
+          <DashboardHome
+            orders={orders}
+            employees={employees}
+            customers={customers}
+            services={services}
+          />
+        );
     }
   };
 

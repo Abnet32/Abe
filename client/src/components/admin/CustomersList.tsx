@@ -1,7 +1,6 @@
-
-import React from 'react';
-import type { Customer } from '../../types.ts';
-import { Edit, Trash2, ExternalLink } from 'lucide-react';
+import React from "react";
+import type { Customer } from "../../types.ts";
+import { Edit, Trash2, ExternalLink } from "lucide-react";
 
 interface CustomersListProps {
   customers: Customer[];
@@ -9,7 +8,11 @@ interface CustomersListProps {
   onDelete: (id: number) => void;
 }
 
-const CustomersList: React.FC<CustomersListProps> = ({ customers, onEdit, onDelete }) => {
+const CustomersList: React.FC<CustomersListProps> = ({
+  customers,
+  onEdit,
+  onDelete,
+}) => {
   return (
     <div>
       <div className="mb-8">
@@ -20,7 +23,11 @@ const CustomersList: React.FC<CustomersListProps> = ({ customers, onEdit, onDele
       </div>
 
       <div className="bg-white p-6 mb-6 rounded-lg border border-gray-200 shadow-sm">
-        <input type="text" placeholder="Search for a customer using first name, last name, email address or phone number" className="w-full text-sm p-3 outline-none placeholder-gray-400 bg-white text-gray-800" />
+        <input
+          type="text"
+          placeholder="Search for a customer using first name, last name, email address or phone number"
+          className="w-full text-sm p-3 outline-none placeholder-gray-400 bg-white text-gray-800"
+        />
       </div>
 
       <div className="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-100">
@@ -40,40 +47,58 @@ const CustomersList: React.FC<CustomersListProps> = ({ customers, onEdit, onDele
             </thead>
             <tbody>
               {customers.map((cust) => (
-                <tr key={cust.id} className="border-b hover:bg-gray-50 transition-colors">
+                <tr
+                  key={cust.id}
+                  className="border-b hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-6 py-4 font-bold">{cust.id}</td>
-                  <td className="px-6 py-4 font-bold text-brand-blue">{cust.firstName}</td>
+                  <td className="px-6 py-4 font-bold text-brand-blue">
+                    {cust.firstName}
+                  </td>
                   <td className="px-6 py-4">{cust.lastName}</td>
                   <td className="px-6 py-4">{cust.email}</td>
                   <td className="px-6 py-4">{cust.phone}</td>
                   <td className="px-6 py-4">{cust.addedDate}</td>
                   <td className="px-6 py-4">
-                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold ${cust.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                      {cust.active ? 'Yes' : 'No'}
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold ${
+                        cust.active
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {cust.active ? "Yes" : "No"}
                     </span>
                   </td>
                   <td className="px-6 py-4 flex gap-3">
-                    <button 
+                    <button
                       onClick={() => onEdit(cust)}
                       className="text-gray-400 hover:text-brand-blue transition-colors"
                       title="Edit"
                     >
                       <Edit size={18} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => onDelete(cust.id)}
                       className="text-gray-400 hover:text-brand-red transition-colors"
                       title="Delete"
                     >
                       <Trash2 size={18} />
                     </button>
-                    <button className="text-gray-400 hover:text-brand-blue"><ExternalLink size={18} /></button>
+                    <button className="text-gray-400 hover:text-brand-blue">
+                      <ExternalLink size={18} />
+                    </button>
                   </td>
                 </tr>
               ))}
               {customers.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-6 py-8 text-center text-gray-500 italic">No customers found</td>
+                  <td
+                    colSpan={8}
+                    className="px-6 py-8 text-center text-gray-500 italic"
+                  >
+                    No customers found
+                  </td>
                 </tr>
               )}
             </tbody>

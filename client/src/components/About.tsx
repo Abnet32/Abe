@@ -1,9 +1,11 @@
-
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React from "react";
+import { ArrowRight } from "lucide-react";
 
 interface AboutProps {
-  onNavigate?: (view: 'home' | 'login' | 'admin' | 'contact' | 'services' | 'about', sectionId?: string) => void;
+  onNavigate?: (
+    view: "home" | "login" | "admin" | "contact" | "services" | "about",
+    sectionId?: string
+  ) => void;
 }
 
 const About: React.FC<AboutProps> = ({ onNavigate }) => {
@@ -11,58 +13,72 @@ const About: React.FC<AboutProps> = ({ onNavigate }) => {
     <section id="about" className="py-20 bg-white overflow-hidden scroll-mt-20">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row gap-12">
-          
           {/* Image Grid Left */}
           <div className="lg:w-1/2 relative">
             <div className="flex gap-4 h-[450px]">
               <div className="w-1/2 h-full bg-gray-200 relative overflow-hidden group">
-                <img 
-                  src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=600&q=80" 
-                  alt="Oil change" 
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" 
+                <img
+                  src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=600&q=80"
+                  alt="Oil change"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
               </div>
               <div className="w-1/2 h-3/4 self-end bg-gray-300 relative overflow-hidden group">
-                 <img 
-                   src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&w=800&q=80" 
-                   alt="Car Service" 
-                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" 
-                 />
-                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                <img
+                  src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&w=800&q=80"
+                  alt="Car Service"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
               </div>
             </div>
             {/* Years Experience Badge */}
             <div className="absolute bottom-0 left-[40%] translate-x-[-50%] translate-y-[20%] bg-white p-2 shadow-xl z-10">
               <div className="border-2 border-brand-red/20 p-6 text-center bg-white min-w-[140px]">
-                <span className="block text-5xl font-black text-brand-red font-heading leading-none">24</span>
-                <span className="block text-xs font-bold text-brand-red tracking-widest mt-1">YEARS</span>
-                <span className="block text-[10px] text-gray-400 tracking-wide uppercase">Experience</span>
+                <span className="block text-5xl font-black text-brand-red font-heading leading-none">
+                  24
+                </span>
+                <span className="block text-xs font-bold text-brand-red tracking-widest mt-1">
+                  YEARS
+                </span>
+                <span className="block text-[10px] text-gray-400 tracking-wide uppercase">
+                  Experience
+                </span>
               </div>
             </div>
           </div>
 
           {/* Text Content Right */}
           <div className="lg:w-1/2 pt-8 lg:pl-10">
-             <span className="text-sm text-gray-600 font-medium mb-2 block">Welcome to Our workshop</span>
-             <h3 className="text-4xl font-bold text-brand-blue mb-6 font-heading">We have 24 years experience</h3>
-             
-             <p className="text-gray-500 mb-6 leading-relaxed text-sm">
-               At Abe Garage, we bring table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution.
-             </p>
-             
-             <p className="text-gray-500 mb-8 leading-relaxed text-sm">
-               Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing.
-             </p>
+            <span className="text-sm text-gray-600 font-medium mb-2 block">
+              Welcome to Our workshop
+            </span>
+            <h3 className="text-4xl font-bold text-brand-blue mb-6 font-heading">
+              We have 24 years experience
+            </h3>
 
-             <button 
-               onClick={() => onNavigate?.('services')}
-               className="bg-brand-red text-white px-8 py-3 text-xs font-bold tracking-widest flex items-center gap-2 hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl"
-             >
-               VIEW SERVICES <ArrowRight size={16} />
-             </button>
+            <p className="text-gray-500 mb-6 leading-relaxed text-sm">
+              At Abe Garage, we bring table win-win survival strategies to
+              ensure proactive domination. At the end of the day, going forward,
+              a new normal that has evolved from generation X is on the runway
+              heading towards a streamlined cloud solution.
+            </p>
+
+            <p className="text-gray-500 mb-8 leading-relaxed text-sm">
+              Capitalize on low hanging fruit to identify a ballpark value added
+              activity to beta test. Override the digital divide with additional
+              clickthroughs from DevOps. Nanotechnology immersion along the
+              information highway will close the loop on focusing.
+            </p>
+
+            <button
+              onClick={() => onNavigate?.("services")}
+              className="bg-brand-red text-white px-8 py-3 text-xs font-bold tracking-widest flex items-center gap-2 hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl"
+            >
+              VIEW SERVICES <ArrowRight size={16} />
+            </button>
           </div>
-
         </div>
       </div>
     </section>

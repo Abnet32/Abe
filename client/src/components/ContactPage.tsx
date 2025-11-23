@@ -31,7 +31,7 @@ const ContactPage: React.FC = () => {
               <p className="text-[10px] text-gray-500 leading-tight">
                 Shiromeda, Addis Ababa, Ethiopia
               </p>
-              <div className="flex items-center gap-1 mt-2 text-[10px] text-yellow-500">
+              <div className="flex items-center gap-1 mt-2 text-[10px] text-red-500">
                 ★★★★☆{" "}
                 <span className="text-blue-400 underline ml-1">
                   124 reviews

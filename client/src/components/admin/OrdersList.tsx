@@ -1,17 +1,22 @@
-
-import React from 'react';
-import type { Order, Customer, Vehicle, Employee } from '../../types.ts';
-import { Edit, ExternalLink } from 'lucide-react';
+import React from "react";
+import type { Order, Customer, Vehicle, Employee } from "../../types.ts";
+import { Edit, ExternalLink } from "lucide-react";
 
 interface OrdersListProps {
   orders: Order[];
   customers: Customer[];
   vehicles: Vehicle[];
   employees: Employee[];
-  onUpdateStatus: (id: number, status: Order['status']) => void;
+  onUpdateStatus: (id: number, status: Order["status"]) => void;
 }
 
-const OrdersList: React.FC<OrdersListProps> = ({ orders, customers, vehicles, employees, onUpdateStatus }) => {
+const OrdersList: React.FC<OrdersListProps> = ({
+  orders,
+  customers,
+  vehicles,
+  employees,
+  onUpdateStatus,
+}) => {
   return (
     <div>
       <div className="mb-8">
@@ -37,48 +42,88 @@ const OrdersList: React.FC<OrdersListProps> = ({ orders, customers, vehicles, em
             </thead>
             <tbody>
               {orders.map((order) => {
-                const customer = customers.find(c => c.id === order.customerId);
-                const vehicle = vehicles.find(v => v.id === order.vehicleId);
-                const employee = employees.find(e => e.id === order.employeeId);
+                const customer = customers.find(
+                  (c) => c.id === order.customerId
+                );
+                const vehicle = vehicles.find((v) => v.id === order.vehicleId);
+                const employee = employees.find(
+                  (e) => e.id === order.employeeId
+                );
 
                 return (
-                  <tr key={order.id} className="border-b hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-bold text-gray-800">{order.id}</td>
-                    <td className="px-6 py-4">
-                       <div className="font-bold text-brand-blue">{customer?.firstName} {customer?.lastName}</div>
-                       <div className="text-xs text-gray-500">{customer?.email}</div>
-                       <div className="text-xs text-gray-500">{customer?.phone}</div>
+                  <tr
+                    key={order.id}
+                    className="border-b hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-6 py-4 font-bold text-gray-800">
+                      {order.id}
                     </td>
                     <td className="px-6 py-4">
-                       <div className="font-bold text-gray-700">{vehicle?.make} {vehicle?.model}</div>
-                       <div className="text-xs text-gray-500">{vehicle?.year} - {vehicle?.tag}</div>
+                      <div className="font-bold text-brand-blue">
+                        {customer?.firstName} {customer?.lastName}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {customer?.email}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {customer?.phone}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="font-bold text-gray-700">
+                        {vehicle?.make} {vehicle?.model}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {vehicle?.year} - {vehicle?.tag}
+                      </div>
                     </td>
                     <td className="px-6 py-4">{order.date}</td>
-                    <td className="px-6 py-4">{employee ? `${employee.firstName} ${employee.lastName}` : 'Unassigned'}</td>
                     <td className="px-6 py-4">
-                      <span 
+                      {employee
+                        ? `${employee.firstName} ${employee.lastName}`
+                        : "Unassigned"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
                         onClick={() => {
-                           const nextStatus = order.status === 'Received' ? 'In Progress' : order.status === 'In Progress' ? 'Completed' : 'Received';
-                           onUpdateStatus(order.id, nextStatus);
+                          const nextStatus =
+                            order.status === "Received"
+                              ? "In Progress"
+                              : order.status === "In Progress"
+                              ? "Completed"
+                              : "Received";
+                          onUpdateStatus(order.id, nextStatus);
                         }}
                         className={`cursor-pointer px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        order.status === 'Completed' ? 'bg-green-500 text-white' :
-                        order.status === 'In Progress' ? 'bg-yellow-400 text-brand-blue' :
-                        'bg-gray-500 text-white'
-                      }`}>
+                          order.status === "Completed"
+                            ? "bg-green-500 text-white"
+                            : order.status === "In Progress"
+                            ? "bg-red-400 text-brand-blue"
+                            : "bg-gray-500 text-white"
+                        }`}
+                      >
                         {order.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 flex gap-3">
-                      <button className="text-gray-400 hover:text-brand-blue"><Edit size={18} /></button>
-                      <button className="text-gray-400 hover:text-brand-blue"><ExternalLink size={18} /></button>
+                      <button className="text-gray-400 hover:text-brand-blue">
+                        <Edit size={18} />
+                      </button>
+                      <button className="text-gray-400 hover:text-brand-blue">
+                        <ExternalLink size={18} />
+                      </button>
                     </td>
                   </tr>
                 );
               })}
               {orders.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500 italic">No orders found</td>
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-gray-500 italic"
+                  >
+                    No orders found
+                  </td>
                 </tr>
               )}
             </tbody>

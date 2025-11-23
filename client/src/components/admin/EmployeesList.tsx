@@ -1,7 +1,6 @@
-
-import React from 'react';
-import type { Employee } from '../../types.ts';
-import { Edit, Trash2 } from 'lucide-react';
+import React from "react";
+import type { Employee } from "../../types.ts";
+import { Edit, Trash2 } from "lucide-react";
 
 interface EmployeesListProps {
   employees: Employee[];
@@ -9,7 +8,11 @@ interface EmployeesListProps {
   onDelete: (id: number) => void;
 }
 
-const EmployeesList: React.FC<EmployeesListProps> = ({ employees, onEdit, onDelete }) => {
+const EmployeesList: React.FC<EmployeesListProps> = ({
+  employees,
+  onEdit,
+  onDelete,
+}) => {
   return (
     <div>
       <div className="mb-8">
@@ -36,27 +39,40 @@ const EmployeesList: React.FC<EmployeesListProps> = ({ employees, onEdit, onDele
             </thead>
             <tbody>
               {employees.map((emp) => (
-                <tr key={emp.id} className="border-b hover:bg-gray-50 transition-colors">
+                <tr
+                  key={emp.id}
+                  className="border-b hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold ${emp.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                      {emp.active ? 'Active' : 'Inactive'}
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold ${
+                        emp.active
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {emp.active ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-bold text-brand-blue">{emp.firstName}</td>
+                  <td className="px-6 py-4 font-bold text-brand-blue">
+                    {emp.firstName}
+                  </td>
                   <td className="px-6 py-4">{emp.lastName}</td>
                   <td className="px-6 py-4">{emp.email}</td>
                   <td className="px-6 py-4">{emp.phone}</td>
                   <td className="px-6 py-4">{emp.addedDate}</td>
-                  <td className="px-6 py-4 font-bold text-gray-700">{emp.role}</td>
+                  <td className="px-6 py-4 font-bold text-gray-700">
+                    {emp.role}
+                  </td>
                   <td className="px-6 py-4 flex gap-3">
-                    <button 
+                    <button
                       onClick={() => onEdit(emp)}
                       className="text-gray-400 hover:text-brand-blue transition-colors"
                       title="Edit"
                     >
                       <Edit size={18} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => onDelete(emp.id)}
                       className="text-gray-400 hover:text-brand-red transition-colors"
                       title="Delete"
@@ -68,7 +84,12 @@ const EmployeesList: React.FC<EmployeesListProps> = ({ employees, onEdit, onDele
               ))}
               {employees.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-6 py-8 text-center text-gray-500 italic">No employees found</td>
+                  <td
+                    colSpan={8}
+                    className="px-6 py-8 text-center text-gray-500 italic"
+                  >
+                    No employees found
+                  </td>
                 </tr>
               )}
             </tbody>

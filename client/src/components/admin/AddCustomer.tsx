@@ -1,20 +1,23 @@
-
-import React, { useState, useEffect } from 'react';
-import type { Customer } from '../../types.ts';
+import React, { useState, useEffect } from "react";
+import type { Customer } from "../../types.ts";
 
 interface AddCustomerProps {
-  onSubmit: (customer: Omit<Customer, 'id' | 'addedDate'>) => void;
+  onSubmit: (customer: Omit<Customer, "id" | "addedDate">) => void;
   initialData?: Customer;
   isEditing?: boolean;
 }
 
-const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEditing = false }) => {
+const AddCustomer: React.FC<AddCustomerProps> = ({
+  onSubmit,
+  initialData,
+  isEditing = false,
+}) => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    active: true
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    active: true,
   });
 
   useEffect(() => {
@@ -24,7 +27,7 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
         lastName: initialData.lastName,
         email: initialData.email,
         phone: initialData.phone,
-        active: initialData.active
+        active: initialData.active,
       });
     }
   }, [initialData]);
@@ -36,11 +39,11 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-     if (type === 'checkbox') {
-       const checked = (e.target as HTMLInputElement).checked;
-       setFormData(prev => ({ ...prev, [name]: checked }));
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
-       setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -48,15 +51,22 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
     <div className="max-w-4xl">
       <div className="mb-10">
         <h2 className="text-3xl md:text-4xl font-bold text-brand-blue font-heading relative inline-block">
-          {isEditing ? `Edit: ${formData.firstName} ${formData.lastName}` : 'Add a new customer'}
+          {isEditing
+            ? `Edit: ${formData.firstName} ${formData.lastName}`
+            : "Add a new customer"}
           <div className="absolute -right-20 top-1/2 h-[3px] w-16 bg-brand-red hidden md:block"></div>
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white p-10 shadow-sm rounded-lg space-y-8">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-10 shadow-sm rounded-lg space-y-8"
+      >
         <div className="space-y-6">
           <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Customer Email</label>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
+              Customer Email
+            </label>
             <input
               type="email"
               name="email"
@@ -68,7 +78,9 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
             />
           </div>
           <div>
-             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">First Name</label>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
+              First Name
+            </label>
             <input
               type="text"
               name="firstName"
@@ -80,7 +92,9 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
             />
           </div>
           <div>
-             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Last Name</label>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
+              Last Name
+            </label>
             <input
               type="text"
               name="lastName"
@@ -92,7 +106,9 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
             />
           </div>
           <div>
-             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Phone</label>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
+              Phone
+            </label>
             <input
               type="text"
               name="phone"
@@ -104,20 +120,25 @@ const AddCustomer: React.FC<AddCustomerProps> = ({ onSubmit, initialData, isEdit
             />
           </div>
           <div className="flex items-center gap-3 pt-2">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               name="active"
               checked={formData.active}
               onChange={handleChange}
               id="cust-active"
               className="w-5 h-5 text-brand-red"
             />
-            <label htmlFor="cust-active" className="text-sm text-gray-600">Is active customer</label>
+            <label htmlFor="cust-active" className="text-sm text-gray-600">
+              Is active customer
+            </label>
           </div>
         </div>
 
-        <button type="submit" className="bg-brand-red text-white px-10 py-4 font-bold text-sm uppercase rounded shadow-md hover:bg-red-700 transition-colors">
-          {isEditing ? 'Update' : 'Add Customer'}
+        <button
+          type="submit"
+          className="bg-brand-red text-white px-10 py-4 font-bold text-sm uppercase rounded shadow-md hover:bg-red-700 transition-colors"
+        >
+          {isEditing ? "Update" : "Add Customer"}
         </button>
       </form>
     </div>
