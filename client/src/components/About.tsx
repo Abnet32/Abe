@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import fifteen from "../assets/19.avif";
-import sixteen from "../assets/10.avif";
+import nine from "../assets/9.avif";
+import ten from "../assets/10.avif";
 
 interface AboutProps {
   onNavigate?: (
@@ -20,7 +20,7 @@ const About: React.FC<AboutProps> = ({ onNavigate }) => {
             <div className="flex gap-4 h-[450px]">
               <div className="w-1/2 h-full bg-gray-200 relative overflow-hidden group">
                 <img
-                  src={fifteen}
+                  src={nine}
                   alt="Oil change"
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
@@ -28,7 +28,7 @@ const About: React.FC<AboutProps> = ({ onNavigate }) => {
               </div>
               <div className="w-1/2 h-3/4 self-end bg-gray-300 relative overflow-hidden group">
                 <img
-                  src={sixteen}
+                  src={ten}
                   alt="Car Service"
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
