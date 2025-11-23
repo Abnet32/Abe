@@ -1,6 +1,13 @@
 import React from "react";
 import PageHeader from "./PageHeader";
-import { Gauge, Settings, Disc, Car, CircleDot, Droplet } from "lucide-react";
+import {
+  IconPerformance,
+  IconTransmission,
+  IconBrake,
+  IconEngine,
+  IconTyre,
+  IconPaint,
+} from "./Icons";
 import one from "../assets/1.avif";
 import two from "../assets/2.avif";
 import three from "../assets/3.avif";
@@ -83,7 +90,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onLearnMore }) => {
       ],
       prompt:
         "I'm interested in upgrading my car's performance. Can you explain what options you offer, such as engine tuning, turbo upgrades, or suspension modifications?",
-      icon: <Gauge size={32} strokeWidth={1.5} />,
+      icon: <IconPerformance />,
     },
     {
       title: "Transmission Services",
@@ -99,7 +106,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onLearnMore }) => {
         "Differential Service",
         "Solenoid & Sensor Testing",
       ],
-      icon: <Settings size={32} strokeWidth={1.5} />,
+      icon: <IconTransmission />,
     },
     {
       title: "Brake Repair & Service",
@@ -115,7 +122,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onLearnMore }) => {
         "ABS Diagnostics",
         "Caliper Service",
       ],
-      icon: <Disc size={32} strokeWidth={1.5} />,
+      icon: <IconBrake />,
     },
     {
       title: "Engine Service & Repair",
@@ -131,7 +138,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onLearnMore }) => {
         "Engine Overhauls",
         "Cooling System Repair",
       ],
-      icon: <Car size={32} strokeWidth={1.5} />,
+      icon: <IconEngine />,
     },
     {
       title: "Tyre & Wheels",
@@ -147,7 +154,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onLearnMore }) => {
         "Flat Tire Repair",
         "TPMS Service",
       ],
-      icon: <CircleDot size={32} strokeWidth={1.5} />,
+      icon: <IconTyre />,
     },
     {
       title: "Denting & Painting",
@@ -163,7 +170,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onLearnMore }) => {
         "Bumper Repair",
         "Frame Straightening",
       ],
-      icon: <Droplet size={32} strokeWidth={1.5} />,
+      icon: <IconPaint />,
     },
   ];
 

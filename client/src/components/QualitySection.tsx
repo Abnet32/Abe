@@ -1,4 +1,5 @@
 import React from "react";
+import eleven from '../assets/11.avif';
 
 const QualitySection: React.FC = () => {
   return (
@@ -20,7 +21,7 @@ const QualitySection: React.FC = () => {
       {/* Right Image Side */}
       <div className="lg:w-1/2 h-[300px] lg:h-auto relative overflow-hidden bg-black">
         <img
-          src="https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&w=1200&q=80"
+          src={eleven}
           alt="Car Dashboard"
           className="w-full h-full object-cover opacity-90"
         />

@@ -1,5 +1,4 @@
 import React from "react";
-import { Gauge, Settings, Disc, Car, CircleDot, Droplet } from "lucide-react";
 import {
   IconPerformance,
   IconTransmission,

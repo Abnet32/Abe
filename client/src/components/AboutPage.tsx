@@ -1,6 +1,8 @@
 import React from "react";
 import PageHeader from "./PageHeader";
 import { ArrowRight } from "lucide-react";
+import nine from '../assets/9.avif';
+import ten from '../assets/10.avif';
 
 interface AboutPageProps {
   onNavigate: (view: any, sectionId?: string) => void;
@@ -18,7 +20,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             <div className="flex gap-4 h-[450px]">
               <div className="w-1/2 h-full bg-gray-200 relative overflow-hidden group">
                 <img
-                  src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=600&q=80"
+                  src={nine}
                   alt="Oil change"
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
@@ -26,7 +28,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               </div>
               <div className="w-1/2 h-3/4 self-end bg-gray-300 relative overflow-hidden group">
                 <img
-                  src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&w=800&q=80"
+                  src={ten}
                   alt="Car Service"
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />

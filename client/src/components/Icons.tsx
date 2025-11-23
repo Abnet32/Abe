@@ -13,28 +13,28 @@ import {
 export const IconPerformance = () => (
   <Gauge
     size={40}
-    className="text-gray-400 group-hover:text-brand-red transition-colors"
+    className="text-gray-700 group-hover:text-red-600 transition-colors"
     strokeWidth={1.5}
   />
 );
 export const IconTransmission = () => (
   <Settings
     size={40}
-    className="text-gray-400 group-hover:text-brand-red transition-colors"
+    className="text-gray-700 group-hover:text-red-600 transition-colors"
     strokeWidth={1.5}
   />
 );
 export const IconBrake = () => (
   <Disc
     size={40}
-    className="text-gray-400 group-hover:text-brand-red transition-colors"
+    className="text-gray-700 group-hover:text-red-600 transition-colors"
     strokeWidth={1.5}
   />
 );
 export const IconEngine = () => (
   <Car
     size={40}
-    className="text-gray-400 group-hover:text-brand-red transition-colors"
+    className="text-gray-700 group-hover:text-red-600 transition-colors"
     strokeWidth={1.5}
   />
 );
@@ -42,7 +42,7 @@ export const IconTyre = () => (
   <div className="relative">
     <Disc
       size={40}
-      className="text-gray-400 group-hover:text-brand-red transition-colors"
+      className="text-gray-700 group-hover:text-red-600 transition-colors"
       strokeWidth={1.5}
     />
   </div>
@@ -50,7 +50,7 @@ export const IconTyre = () => (
 export const IconPaint = () => (
   <Droplet
     size={40}
-    className="text-gray-400 group-hover:text-brand-red transition-colors"
+    className="text-gray-700 group-hover:text-red-600 transition-colors"
     strokeWidth={1.5}
   />
 );
