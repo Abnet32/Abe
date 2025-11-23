@@ -134,14 +134,14 @@ const Header: React.FC<HeaderProps> = ({
             {isLoggedIn ? (
               <button
                 onClick={onLogout}
-                className="bg-brand-red text-white px-6 py-2 text-xs font-bold hover:bg-red-700 transition-colors"
+                className="bg-brand-blue text-white px-6 py-2 text-xs font-bold hover:bg-red-700 transition-colors"
               >
                 LOG OUT
               </button>
             ) : (
               <button
                 onClick={() => onNavigate("login")}
-                className="bg-brand-red text-white px-6 py-2 text-sm font-bold hover:bg-red-700 transition-colors"
+                className="bg-brand-blue text-white px-6 py-2 text-sm font-bold hover:bg-red-700 transition-colors"
               >
                 SIGN IN
               </button>
@@ -197,7 +197,7 @@ const Header: React.FC<HeaderProps> = ({
                       onLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full bg-brand-red text-white px-6 py-4 text-sm font-bold hover:bg-red-700 transition-colors rounded shadow-sm uppercase tracking-widest"
+                    className="w-full bg-brand-blue text-white px-6 py-4 text-sm font-bold hover:bg-red-700 transition-colors rounded shadow-sm uppercase tracking-widest"
                   >
                     Log Out
                   </button>
@@ -207,7 +207,7 @@ const Header: React.FC<HeaderProps> = ({
                       onNavigate("login");
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full bg-brand-red text-white px-6 py-4 text-sm font-bold hover:bg-red-700 transition-colors rounded shadow-sm uppercase tracking-widest"
+                    className="w-full bg-brand-blue text-white px-6 py-4 text-sm font-bold hover:bg-red-700 transition-colors rounded shadow-sm uppercase tracking-widest"
                   >
                     Sign In
                   </button>
