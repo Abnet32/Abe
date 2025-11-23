@@ -123,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({
                 <a
                   href="#"
                   onClick={(e) => handleLinkClick(e, () => onNavigate("home"))}
-                  className="hover:text-brand-red transition-colors"
+                  className="hover:text-brand-red transition-colors hover:text-red-600"
                 >
                   Home
                 </a>
@@ -132,7 +132,7 @@ const Footer: React.FC<FooterProps> = ({
                 <a
                   href="#"
                   onClick={(e) => handleLinkClick(e, () => onNavigate("about"))}
-                  className="hover:text-brand-red transition-colors"
+                  className="hover:text-brand-red transition-colors hover:text-red-600"
                 >
                   About Us
                 </a>
@@ -143,7 +143,7 @@ const Footer: React.FC<FooterProps> = ({
                   onClick={(e) =>
                     handleLinkClick(e, () => onNavigate("contact"))
                   }
-                  className="hover:text-brand-red transition-colors"
+                  className="hover:text-brand-red transition-colors hover:text-red-600"
                 >
                   Appointment
                 </a>
@@ -152,7 +152,7 @@ const Footer: React.FC<FooterProps> = ({
                 <a
                   href="#"
                   onClick={(e) => handleLinkClick(e, () => onNavigate("about"))}
-                  className="hover:text-brand-red transition-colors"
+                  className="hover:text-brand-red transition-colors hover:text-red-600"
                 >
                   Testimonials
                 </a>
@@ -163,7 +163,7 @@ const Footer: React.FC<FooterProps> = ({
                   onClick={(e) =>
                     handleLinkClick(e, () => onNavigate("contact"))
                   }
-                  className="hover:text-brand-red transition-colors"
+                  className="hover:text-brand-red transition-colors hover:text-red-600"
                 >
                   Contact Us
                 </a>
@@ -189,7 +189,7 @@ const Footer: React.FC<FooterProps> = ({
                     onClick={(e) =>
                       handleLinkClick(e, () => onNavigate("services"))
                     }
-                    className="hover:text-brand-red transition-colors"
+                    className="hover:text-brand-red transition-colors hover:text-red-600"
                   >
                     {link}
                   </a>
@@ -206,19 +206,19 @@ const Footer: React.FC<FooterProps> = ({
             <div className="flex gap-3 mt-4">
               <a
                 href="#"
-                className="border border-gray-600 p-2 rounded-full hover:bg-brand-red hover:border-brand-red transition-colors"
+                className="border border-gray-600 p-2 rounded-full hover:bg-brand-red hover:border-brand-red transition-colors hover:bg-red-600"
               >
                 <Facebook size={14} />
               </a>
               <a
                 href="#"
-                className="border border-gray-600 p-2 rounded-full hover:bg-brand-red hover:border-brand-red transition-colors"
+                className="border border-gray-600 p-2 rounded-full hover:bg-brand-red hover:border-brand-red transition-colors hover:bg-red-600"
               >
                 <Linkedin size={14} />
               </a>
               <a
                 href="#"
-                className="border border-gray-600 p-2 rounded-full hover:bg-brand-red hover:border-brand-red transition-colors"
+                className="border border-gray-600 p-2 rounded-full hover:bg-brand-red hover:border-brand-red transition-colors hover:bg-red-600"
               >
                 <Twitter size={14} />
               </a>

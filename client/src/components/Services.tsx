@@ -23,36 +23,41 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onClick }) => (
-  <div 
+  <div
     onClick={onClick}
     className="bg-white group hover:shadow-2xl transition-all duration-300 border-b-[3px] border-transparent hover:border-brand-red cursor-pointer flex flex-col h-full transform hover:-translate-y-2 hover:scale-[1.02]"
   >
     <div className="h-52 overflow-hidden relative">
-      <img 
-        src={service.image} 
-        alt={service.title} 
-        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+      <img
+        src={service.image}
+        alt={service.title}
+        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
     </div>
-    
+
     <div className="p-8 flex flex-col flex-1">
       <div className="mb-3">
-        <h4 className="text-xl font-bold text-brand-blue font-heading group-hover:text-gray-800 transition-colors">{service.title}</h4>
+        <h4 className="text-xl font-bold text-brand-blue font-heading group-hover:text-gray-800 transition-colors">
+          {service.title}
+        </h4>
       </div>
-      
+
       <p className="text-gray-500 text-xs leading-relaxed mb-6 line-clamp-3 flex-1">
-         {service.shortDescription || service.extendedDescription}
+        {service.shortDescription || service.extendedDescription}
       </p>
-      
+
       <div className="mt-auto flex items-end justify-between">
-         <span className="text-[10px] font-bold text-brand-red uppercase tracking-wider group-hover:underline flex items-center gap-1">
-           Read More <span className="inline-block transition-transform group-hover:translate-x-1 group-hover:rotate-90">+</span>
-         </span>
-         
-         <div className="opacity-80 group-hover:opacity-100 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 text-brand-blue group-hover:text-brand-red">
-            {service.icon}
-         </div>
+        <span className="text-[10px] font-bold text-brand-red uppercase tracking-wider group-hover:underline flex items-center gap-1">
+          Read More{" "}
+          <span className="inline-block transition-transform group-hover:translate-x-1 group-hover:rotate-90">
+            +
+          </span>
+        </span>
+
+        <div className="opacity-80 group-hover:opacity-100 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 text-brand-blue group-hover:text-brand-red">
+          {service.icon}
+        </div>
       </div>
     </div>
   </div>

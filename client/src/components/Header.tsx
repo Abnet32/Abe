@@ -51,11 +51,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, on
   return (
     <header className="w-full font-sans z-50 sticky top-0 shadow-sm">
       {/* Top Bar: Blue Background with Red Left Segment */}
-      <div className="bg-brand-blue text-white text-2xs overflow-hidden">
+      <div className="bg-brand-blue text-white text-2xs overflow-hidden ">
         <div className="container mx-auto flex justify-between items-center h-10 md:h-12">
           <div className="flex h-full items-center">
             {/* Red Block for Slogan - Extended to left with pseudo-element */}
-            <div className="bg-brand-red h-full flex items-center px-4 md:px-6 relative mr-4 md:mr-6 skew-x-0 before:content-[''] before:absolute before:top-0 before:bottom-0 before:right-full before:w-screen before:bg-brand-red">
+            <div className="bg-brand-red h-full  flex items-center px-4 md:px-6 relative mr-4 md:mr-6 skew-x-0 before:content-[''] before:absolute before:top-0 before:bottom-0 before:right-full before:w-screen before:bg-brand-red">
               <span className="text-white/90 whitespace-nowrap relative z-10 tracking-wide font-medium">
                 Enjoy the Beso while we fix your car
               </span>
@@ -96,8 +96,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, on
               </div>
               {/* Updated Logo Underline: Red and Blue segments */}
               <div className="h-1.5 w-full bg-gray-100 mt-1 rounded-full overflow-hidden flex">
-                <div className="h-full w-1/2 bg-brand-red"></div>
                 <div className="h-full w-1/2 bg-brand-blue"></div>
+                <div className="h-full w-1/2 bg-brand-red"></div>
               </div>
             </div>
           </div>
@@ -109,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, on
                 key={item.label}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item)}
-                className={`hover:text-brand-red transition-colors cursor-pointer flex flex-col items-center group ${
+                className={`hover:text-brand-red transition-colors cursor-pointer flex flex-col items-center group hover:text-red-500 ${
                   item.hasBorder ? "border-r border-gray-300 pr-6" : ""
                 } ${
                   (currentView === "home" && item.href === "#home") ||
@@ -158,7 +158,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, on
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item)}
-                  className={`py-4 px-4 font-bold font-heading border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors ${
+                  className={`py-4 px-4 font-bold font-heading border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors hover:text-red-500  ${
                     (currentView === "home" && item.href === "#home") ||
                     currentView === item.view
                       ? "text-brand-red"
