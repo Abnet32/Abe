@@ -1,7 +1,7 @@
 import React from "react";
 import PageHeader from "./PageHeader";
 import { ArrowRight } from "lucide-react";
-import nine from '../assets/9.avif';
+import nine from '../assets/19.avif';
 import ten from '../assets/10.avif';
 
 interface AboutPageProps {

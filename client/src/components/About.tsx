@@ -1,8 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import fifteen from '../assets/15.avif';
-import sixteen from "../assets/16.avif";
-
+import fifteen from "../assets/19.avif";
+import sixteen from "../assets/10.avif";
 
 interface AboutProps {
   onNavigate?: (
