@@ -1,34 +1,41 @@
-
-import React, { useState } from 'react';
-import { Clock, Menu, X, Phone } from 'lucide-react';
+import React, { useState } from "react";
+import { Clock, Menu, X, Phone } from "lucide-react";
 
 interface HeaderProps {
-  currentView: 'home' | 'login' | 'admin' | 'contact' | 'about' | 'services';
-  onNavigate: (view: 'home' | 'login' | 'admin' | 'contact' | 'about' | 'services', sectionId?: string) => void;
+  currentView: "home" | "login" | "admin" | "contact" | "about" | "services";
+  onNavigate: (
+    view: "home" | "login" | "admin" | "contact" | "about" | "services",
+    sectionId?: string
+  ) => void;
   isLoggedIn: boolean;
   onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({
+  currentView,
+  onNavigate,
+  isLoggedIn,
+  onLogout,
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { label: 'HOME', href: '#home' },
-    { label: 'ABOUT US', href: '#about', view: 'about' },
-    { label: 'SERVICES', href: '#services', view: 'services' },
-    { label: 'CONTACT US', href: '#contact', view: 'contact' },
-    { label: 'ADMIN', href: '#', hasBorder: true, view: 'admin' },
+    { label: "HOME", href: "#home" },
+    { label: "ABOUT US", href: "#about", view: "about" },
+    { label: "SERVICES", href: "#services", view: "services" },
+    { label: "CONTACT US", href: "#contact", view: "contact" },
+    { label: "ADMIN", href: "#", hasBorder: true, view: "admin" },
   ];
 
   const handleNavClick = (e: React.MouseEvent, item: any) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    
-    if (item.label === 'ADMIN') {
+
+    if (item.label === "ADMIN") {
       if (isLoggedIn) {
-        onNavigate('admin');
+        onNavigate("admin");
       } else {
-        onNavigate('login');
+        onNavigate("login");
       }
       return;
     }
@@ -38,12 +45,12 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, on
       return;
     }
 
-    if (item.href.startsWith('#')) {
-      const sectionId = item.href.replace('#', '');
-      if (sectionId === 'home') {
-        onNavigate('home');
+    if (item.href.startsWith("#")) {
+      const sectionId = item.href.replace("#", "");
+      if (sectionId === "home") {
+        onNavigate("home");
       } else {
-        onNavigate('home', sectionId);
+        onNavigate("home", sectionId);
       }
     }
   };
@@ -67,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, isLoggedIn, on
             </span>
           </div>
 
-          <div className="font-bold pr-4 z-10 flex gap-1">
+          <div className="font-bold pr-10 z-10 flex gap-1">
             {isLoggedIn ? (
               "Welcome Admin"
             ) : (

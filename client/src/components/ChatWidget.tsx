@@ -178,7 +178,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ isOpen, setIsOpen, initialMessa
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold text-sm leading-none">Need Help?</span>
-            <span className="text-[10px] text-red-100 font-medium">Chat with AI</span>
+            <span className="text-[10px] text-red-100 font-medium">Chat Abe AI</span>
           </div>
         </button>
       )}

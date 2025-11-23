@@ -252,113 +252,123 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, onLogout })
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
-       {/* Mobile Menu Overlay */}
-       {mobileMenuOpen && (
-         <div className="fixed inset-0 z-50 bg-black/50 lg:hidden" onClick={() => setMobileMenuOpen(false)}></div>
-       )}
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        ></div>
+      )}
 
-       {/* Top Header Mobile - Styled to match main theme but for admin */}
-       <header className="lg:hidden h-16 bg-white shadow-md flex items-center justify-between px-4 shrink-0 sticky top-0 z-40 relative">
-         <button 
-           onClick={() => setMobileMenuOpen(true)} 
-           className="p-2 text-brand-blue hover:bg-gray-100 rounded transition-colors"
-         >
-            <Menu size={28} />
-         </button>
-         <div className="flex items-center gap-2">
-            <span className="font-bold text-lg tracking-wide text-brand-blue font-heading">Admin Panel</span>
-         </div>
-         <div className="w-8 h-8 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs shadow-sm">
-           A
-         </div>
-         
-         {/* Red/Blue Bottom Border */}
-         <div className="absolute bottom-0 left-0 w-full h-1 flex">
-            <div className="h-full w-1/2 bg-brand-red"></div>
-            <div className="h-full w-1/2 bg-brand-blue"></div>
-         </div>
-       </header>
+      {/* Top Header Mobile - Styled to match main theme but for admin */}
+      <header className="lg:hidden h-16 bg-white shadow-md flex items-center justify-between px-4 shrink-0 sticky top-0 z-40 relative">
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="p-2 text-brand-blue hover:bg-gray-100 rounded transition-colors"
+        >
+          <Menu size={28} />
+        </button>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-lg tracking-wide text-brand-blue font-heading">
+            Admin Panel
+          </span>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs shadow-sm">
+          A
+        </div>
 
-       <div className="flex flex-1 relative items-stretch">
-         {/* Sidebar */}
-         <aside 
-           className={`fixed lg:sticky lg:top-0 inset-y-0 left-0 z-[60] lg:z-40 w-64 md:w-72 bg-brand-blue border-r border-gray-700 transform transition-transform duration-200 ease-in-out flex flex-col lg:h-screen ${
-              mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-           }`}
-         >
-             {/* Sidebar Header */}
-             <div className="h-24 shrink-0 flex items-center justify-between px-6 lg:justify-center border-b border-gray-700 bg-brand-blue">
-                 <div className="relative w-fit hidden lg:block">
-                   <div className="flex items-baseline gap-2">
-                     <h2 className="text-3xl font-bold text-white tracking-tight font-amharic cursor-pointer" onClick={onLogout}>
-                       <span className="text-brand-red">አቤ</span> ጋራዥ
-                     </h2>
-                   </div>
-                   {/* Logo Underline for sidebar (matches main header style) */}
-                   <div className="h-1 w-full bg-gray-800 mt-1 rounded-full overflow-hidden flex">
-                        <div className="h-full w-1/2 bg-brand-red"></div>
-                        <div className="h-full w-1/2 bg-white/20"></div>
-                   </div>
-                 </div>
-                 
-                 <span className="font-bold text-xl text-white lg:hidden">Menu</span>
-                 <button 
-                   onClick={() => setMobileMenuOpen(false)} 
-                   className="lg:hidden text-gray-400 hover:text-white transition-colors p-1"
-                 >
-                    <X size={24} />
-                 </button>
-             </div>
+        {/* Red/Blue Bottom Border */}
+        <div className="absolute bottom-0 left-0 w-full h-1 flex">
+          <div className="h-full w-1/2 bg-brand-red"></div>
+          <div className="h-full w-1/2 bg-brand-blue"></div>
+        </div>
+      </header>
 
-             <nav 
-                className="flex-1 py-4 px-4 space-y-2 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-             >
-                {menuItems.map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setCurrentView(item.id as AdminView);
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg transition-colors ${
-                      currentView === item.id 
-                        ? 'bg-brand-red text-white shadow-md' 
-                        : 'text-gray-400 hover:bg-slate-800 hover:text-white'
-                    }`}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </button>
-                ))}
+      <div className="flex flex-1 relative items-stretch">
+        {/* Sidebar */}
+        <aside
+          className={`fixed lg:sticky lg:top-0 inset-y-0 left-0 z-[60] lg:z-40 w-64 md:w-72 bg-brand-blue border-r border-gray-700 transform transition-transform duration-200 ease-in-out flex flex-col lg:h-screen ${
+            mobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }`}
+        >
+          {/* Sidebar Header */}
+          <div className="h-24 shrink-0 flex items-center justify-between px-6 lg:justify-center border-b border-gray-700 bg-brand-blue">
+            <div className="relative w-fit hidden lg:block">
+              <div className="flex items-baseline gap-2">
+                <h2
+                  className="text-3xl font-bold text-white tracking-tight font-amharic cursor-pointer"
+                  onClick={() => onNavigate("home")}
+                >
+                  <span className="text-brand-red">አቤ</span> ጋራዥ
+                </h2>
+              </div>
+              {/* Logo Underline for sidebar (matches main header style) */}
+              <div className="h-1 w-full bg-gray-800 mt-1 rounded-full overflow-hidden flex">
+                <div className="h-full w-1/2 bg-white"></div>
+                <div className="h-full w-1/2 bg-brand-red"></div>
+              </div>
+            </div>
 
-                <div className="pt-6 mt-6 border-t border-gray-700 space-y-2 mb-8">
-                   <button
-                    onClick={() => onNavigate('home')}
-                    className="w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white transition-colors"
-                  >
-                    <Home size={18} />
-                    Back to Home
-                  </button>
-                  <button
-                    onClick={onLogout}
-                    className="w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors"
-                  >
-                    <LogOut size={18} />
-                    Log Out
-                  </button>
-                </div>
-             </nav>
-         </aside>
+            <span className="font-bold text-xl text-white lg:hidden">Menu</span>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="lg:hidden text-gray-400 hover:text-white transition-colors p-1"
+            >
+              <X size={24} />
+            </button>
+          </div>
 
-         {/* Main Content */}
-         <main className="flex-1 bg-gray-50 p-6 lg:p-10 overflow-x-hidden">
-            {renderView()}
-         </main>
-       </div>
+          <nav
+            className="flex-1 py-4 px-4 space-y-2 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setCurrentView(item.id as AdminView);
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg transition-colors ${
+                  currentView === item.id
+                    ? "bg-brand-red text-white shadow-md"
+                    : "text-gray-400 hover:bg-slate-800 hover:text-white"
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </button>
+            ))}
 
-       {/* Full Width Footer */}
-       <Footer onNavigate={onNavigate} showAppointmentBanner={false} />
+            <div className="pt-6 mt-6 border-t border-gray-700 space-y-2 mb-8">
+              <button
+                onClick={() => onNavigate("home")}
+                className="w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white transition-colors"
+              >
+                <Home size={18} />
+                Back to Home
+              </button>
+              <button
+                onClick={onLogout}
+                className="w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors"
+              >
+                <LogOut size={18} />
+                Log Out
+              </button>
+            </div>
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 bg-gray-50 p-6 lg:p-10 overflow-x-hidden">
+          {renderView()}
+        </main>
+      </div>
+
+      {/* Full Width Footer */}
+      <Footer onNavigate={onNavigate} showAppointmentBanner={false} />
     </div>
   );
 };
