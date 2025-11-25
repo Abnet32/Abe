@@ -144,51 +144,59 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 1,
       name: "Overview",
-      description: "Key performance indicators and recent activity",
+      description: "Key performance indicators",
+      view: "overview",
     },
     {
       id: 2,
       name: "Add Order",
-      description: "Add new order from customer to be done in garage",
+      description: "Add new order",
+      view: "new-order",
     },
     {
       id: 3,
       name: "All Orders",
-      description: "Quick acess to see list of order from customer",
+      description: "Quick access to orders",
+      view: "orders",
     },
     {
       id: 4,
       name: "Inventory",
-      description: "Track parts, stock levels, and pricing",
+      description: "Track parts, stock levels",
+      view: "inventory",
     },
-
     {
       id: 5,
       name: "Add Employee",
-      description: "Add a new employee to the system that new for garage",
+      description: "Add a new employee",
+      view: "add-employee",
     },
     {
       id: 6,
       name: "All Employees",
-      description:
-        "Quick acess to see list of employee those works  for abe garage",
+      description: "List all employees",
+      view: "employees",
     },
     {
       id: 7,
       name: "Add Customer",
-      description: "Add a new customer to the system that new for garage",
+      description: "Add new customer",
+      view: "add-customer",
     },
     {
       id: 8,
       name: "All Customers",
-      description: "Quick acess to see list of customer those in abe garage",
+      description: "List all customers",
+      view: "customers",
     },
     {
       id: 9,
       name: "All Services",
-      description: "Quick acess to see list of services those in abe garage",
+      description: "List all services",
+      view: "services",
     },
   ]);
+
 
   const [orders, setOrders] = useState<Order[]>([
     {

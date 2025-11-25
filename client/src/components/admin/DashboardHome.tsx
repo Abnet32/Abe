@@ -30,7 +30,7 @@ interface DashboardHomeProps {
 interface DashboardServiceCardProps {
   service: Service;
   icon: React.ReactNode;
-  onClick?: () => void;
+  onClick: () => void;
 }
 const DashboardServiceCard: React.FC<DashboardServiceCardProps> = ({
   service,
@@ -108,7 +108,7 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({
               key={service.id}
               service={service}
               icon={getIconForService(index)}
-              onClick={() => setCurrentView("services")} // or service-specific view
+              onClick={() => setCurrentView(service.view as AdminView)} // <-- dynamic
             />
           ))}
         </div>
