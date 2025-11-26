@@ -9,7 +9,7 @@ import {
   FileText,
   Edit,
   Tag,
-//   CheckCircle,
+  //   CheckCircle,
 } from "lucide-react";
 
 interface CustomerDetailProps {
@@ -37,7 +37,7 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
       <div className="flex items-center gap-4">
         <button
           onClick={onBack}
-          className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-500 hover:text-brand-blue hover:bg-gray-100 transition-colors shadow-sm"
+          className="p-2 rounded-full bg-white text-brand-blue hover:text-brand-blue hover:bg-gray-100 transition-colors shadow-sm"
         >
           <ArrowLeft size={24} />
         </button>
@@ -54,7 +54,7 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Profile Card */}
         <div className="lg:col-span-1 space-y-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+          <div className="bg-white  rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             <div className="bg-brand-blue h-24 relative">
               <div className="absolute -bottom-10 left-6">
                 <div className="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
@@ -67,7 +67,7 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
             <div className="pt-12 pb-6 px-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
+                  <h3 className="text-2xl font-bold text-brand-blue dark:text-white">
                     {customer.firstName} {customer.lastName}
                   </h3>
                   <span
@@ -82,23 +82,23 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
                 </div>
                 <button
                   onClick={() => onEdit(customer)}
-                  className="text-gray-400 hover:text-brand-blue dark:hover:text-white transition-colors"
+                  className="text-brand-blue hover:text-brand-blue dark:hover:text-white transition-colors"
                 >
                   <Edit size={18} />
                 </button>
               </div>
 
               <div className="mt-8 space-y-4">
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                  <Mail size={18} className="text-gray-400" />
+                <div className="flex items-center gap-3 text-brand-blue font-bold">
+                  <Mail size={18} className="text-brand-blue" />
                   <span className="text-sm">{customer.email}</span>
                 </div>
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                  <Phone size={18} className="text-gray-400" />
+                <div className="flex items-center gap-3 text-brand-blue font-bold">
+                  <Phone size={18} className="text-brand-blue" />
                   <span className="text-sm">{customer.phone}</span>
                 </div>
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                  <Calendar size={18} className="text-gray-400" />
+                <div className="flex items-center gap-3 text-brand-blue font-bold">
+                  <Calendar size={18} className="text-brand-blue" />
                   <span className="text-sm">
                     Member since {customer.addedDate}
                   </span>
@@ -109,25 +109,25 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
 
           {/* Summary Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-center">
               <div className="text-brand-red mb-2 flex justify-center">
-                <Car size={24} />
+                <Car size={32} />
               </div>
-              <p className="text-2xl font-bold text-gray-800 dark:text-white">
+              <p className="text-3xl font-bold text-brand-blue">
                 {customerVehicles.length}
               </p>
-              <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">
+              <p className="text-xs text-brand-blue uppercase font-bold tracking-wider">
                 Vehicles
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-center">
-              <div className="text-brand-blue dark:text-blue-400 mb-2 flex justify-center">
-                <FileText size={24} />
+            <div className="bg-white  p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+              <div className="text-brand-red dark:text-blue-400 mb-2 flex justify-center">
+                <FileText size={32} />
               </div>
-              <p className="text-2xl font-bold text-gray-800 dark:text-white">
+              <p className="text-3xl font-bold text-brand-blue">
                 {customerOrders.length}
               </p>
-              <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">
+              <p className="text-xs text-brand-blue uppercase font-bold tracking-wider">
                 Orders
               </p>
             </div>
@@ -137,36 +137,36 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
         {/* Right Column: Vehicles & Orders */}
         <div className="lg:col-span-2 space-y-8">
           {/* Vehicles Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-              <Car size={20} className="text-brand-red" /> Vehicles Owned
+          <div className="bg-white  rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-bold text-brand-blue dark:text-white mb-4 flex items-center gap-2">
+              <Car size={32} className="text-brand-red" /> Vehicles Owned
             </h3>
 
             <div className="space-y-4">
               {customerVehicles.map((vehicle) => (
                 <div
                   key={vehicle.id}
-                  className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-100 dark:border-gray-700 group hover:border-brand-blue/30 transition-colors"
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center p-4  rounded-lg  group hover:border-brand-blue/30 transition-colors"
                 >
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-lg text-brand-blue dark:text-white">
                         {vehicle.year} {vehicle.make} {vehicle.model}
                       </span>
-                      <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
+                      <span className="text-3xs  font-bold text-brand-red px-2 py-0.5 rounded">
                         {vehicle.type}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="font-bold flex items-center gap-4 mt-1 text-2xs text-brand-blue">
                       <span className="flex items-center gap-1">
-                        <Tag size={12} /> Tag: {vehicle.tag}
+                        <Tag size={14} /> Tag: {vehicle.tag}
                       </span>
                       <span>Mileage: {vehicle.mileage}</span>
                       <span>Color: {vehicle.color}</span>
                     </div>
                   </div>
                   <div className="mt-2 md:mt-0 text-right">
-                    <span className="text-xs text-gray-400 font-mono">
+                    <span className="text-2xs font-bold text-brand-blue font-mono">
                       VIN: {vehicle.serial}
                     </span>
                   </div>
@@ -181,18 +181,18 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
           </div>
 
           {/* Orders Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-bold text-brand-blue dark:text-white mb-4 flex items-center gap-2">
               <FileText
-                size={20}
-                className="text-brand-blue dark:text-blue-400"
+                size={32}
+                className="text-brand-red dark:text-blue-400"
               />{" "}
               Service History
             </h3>
 
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
-                <thead className="bg-gray-50 dark:bg-gray-700 text-xs uppercase font-bold text-gray-500 dark:text-gray-400">
+                <thead className="bg-gray-50 text-xs uppercase font-bold text-brand-blue dark:text-gray-400">
                   <tr>
                     <th className="px-4 py-3 rounded-l-md">Order ID</th>
                     <th className="px-4 py-3">Date</th>
@@ -209,15 +209,15 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
                     return (
                       <tr
                         key={order.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                        className="transition-colors"
                       >
-                        <td className="px-4 py-3 font-bold text-gray-800 dark:text-white">
+                        <td className="px-4 py-3 font-bold text-brand-blue">
                           #{order.id}
                         </td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
+                        <td className="px-4 py-3 text-brand-blue font-bold">
                           {order.date}
                         </td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
+                        <td className="px-4 py-3 text-brand-blue font-bold">
                           {vehicle?.make} {vehicle?.model}
                         </td>
                         <td className="px-4 py-3">
@@ -234,7 +234,7 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
                           </span>
                         </td>
                         <td
-                          className="px-4 py-3 text-gray-600 dark:text-gray-300 max-w-xs truncate"
+                          className="px-4 py-3 text-brand-blue font-bold max-w-xs truncate"
                           title={order.description}
                         >
                           {order.description}
