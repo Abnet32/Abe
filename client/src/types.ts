@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { AdminView } from "./components/AdminDashboard";
+// import type { AdminView } from "./components/AdminDashboard";
 
 export interface ServiceItem {
   title: string;
@@ -18,7 +18,22 @@ export interface NavItem {
   href: string;
   isActive?: boolean;
 }
-
+export type AdminView =
+  | "dashboard"
+  | "overview"
+  | "orders"
+  | "new-order"
+  | "edit-order"
+  | "calendar"
+  | "inventory"
+  | "employees"
+  | "add-employee"
+  | "edit-employee"
+  | "customers"
+  | "add-customer"
+  | "edit-customer"
+  | "services"
+  | "customer-detail";
 // Admin / Database Types
 
 export interface Employee {
