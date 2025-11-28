@@ -40,11 +40,13 @@ const App: React.FC = () => {
     }
   }, [currentView, scrollTarget]);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setCurrentView("admin");
-    window.scrollTo(0, 0);
-  };
+ const handleLogin = (token: string, role: string) => {
+   localStorage.setItem("token", token);
+   localStorage.setItem("role", role);
+   setIsLoggedIn(true);
+   setCurrentView("admin");
+ };
+
 
   const handleLogout = () => {
     setIsLoggedIn(false);

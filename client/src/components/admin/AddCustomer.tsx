@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import type { Customer } from "../../types.ts";
+import {
+  addCustomer,
+  updateCustomer
+} from "../../api/Customer.ts";
+
 
 interface AddCustomerProps {
   onSubmit: (customer: Omit<Customer, "id" | "addedDate">) => void;
@@ -32,9 +37,34 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
     }
   }, [initialData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    try {
+      if (isEditing && initialData) {
+        await updateCustomer(String(initialData.id), formData); // convert id to string for API
+        alert("Customer updated successfully!");
+      } else {
+        await addCustomer(formData);
+        alert("Customer added successfully!");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          active: true,
+        });
+      }
+    } catch (err: unknown) {
+      // support Axios-like error objects with a response, standard Error instances, and other values
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const anyErr = err as any;
+        alert(anyErr.response?.data?.message ?? anyErr.message ?? "Error adding customer");
+      } else if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert(String(err) || "Error adding customer");
+      }
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

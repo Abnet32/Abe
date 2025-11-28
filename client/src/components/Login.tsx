@@ -1,36 +1,38 @@
 import React, { useState } from "react";
 import { AlertCircle } from "lucide-react";
+import { loginUser } from "../api/Auth.ts"; // Import from your API file
 
 interface LoginProps {
-  onLogin: () => void;
+  onLogin: (token: string, role: string) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  // Pre-filled for demo convenience
-  const [email, setEmail] = useState("admin@autorex.com");
-  const [password, setPassword] = useState("admin");
+  const [email, setEmail] = useState("admin@abe-garage.com"); // default for demo
+  const [password, setPassword] = useState("password123"); // default for demo
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Simulated API call/Validation
-    setTimeout(() => {
-      // Accept generic admin login or a bypass
-      if (
-        (email === "admin@autorex.com" && password === "admin") ||
-        (email === "demo" && password === "demo")
-      ) {
-        setLoading(false);
-        onLogin();
+    try {
+      const data = await loginUser({ email, password }); // call API
+      onLogin(data.token, data.role); // pass token & role to parent
+      setLoading(false);
+    } catch (err: unknown) {
+      // Handle errors from backend
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const anyErr = err as any;
+        setError(anyErr.response?.data?.message || "Server error");
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
-        setError("Invalid email or password. Try (admin@autorex.com / admin)");
-        setLoading(false);
+        setError(String(err) || "Server error");
       }
-    }, 800);
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,13 +65,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               Email Address
             </label>
             <input
-              type="text"
-              placeholder="admin@autorex.com"
+              type="email"
+              placeholder="admin@abe-garage.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-4 border border-gray-200 text-sm focus:outline-none focus:border-brand-red transition-colors rounded bg-white text-gray-800"
             />
           </div>
+
           <div>
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               Password
