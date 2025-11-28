@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Edit, Trash2,Search, CheckCircle } from "lucide-react";
+import { Edit, Trash2, Search, CheckCircle, ExternalLink } from "lucide-react";
 import type { Employee } from "../../types.ts";
 import { getEmployees } from "../../api/employee.ts";
-
 
 interface EmployeesListProps {
   // employees: (EmployeeData & { id: string; addedDate: string })[];
   onEdit: (employee: EmployeeData & { id: string }) => void;
+  onView: (customer: Employee) => void;
+
   onDelete: (id: string) => void;
 }
 
 const EmployeesList: React.FC<EmployeesListProps> = ({
   // employees,
   onEdit,
+  onView,
   onDelete,
 }) => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -24,13 +26,13 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
       try {
         setLoading(true);
         const data = await getEmployees();
-  
+
         const sorted = [...data].sort((a, b) => {
           const dateA = a.addedDate ? new Date(a.addedDate).getTime() : 0;
           const dateB = b.addedDate ? new Date(b.addedDate).getTime() : 0;
           return dateB - dateA;
         });
-  
+
         setEmployees(sorted);
         setLoading(false);
       } catch (err) {
@@ -40,22 +42,20 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
     };
     fetchData();
   }, []);
-  
-  
-  
-    const filteredEmployees = employees.filter(
-      (c) =>
-        c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.phone.includes(searchTerm)
-    );
-  
-    const isSearching = searchTerm.trim().length > 0;
-  
-    if (loading) return <p className="text-center py-10">Loading Employees...</p>;
-    if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
-  
+
+  const filteredEmployees = employees.filter(
+    (c) =>
+      c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.phone.includes(searchTerm)
+  );
+
+  const isSearching = searchTerm.trim().length > 0;
+
+  if (loading) return <p className="text-center py-10">Loading Employees...</p>;
+  if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
+
   return (
     <div>
       <div className="mb-8">
@@ -83,18 +83,19 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
       {/* Search Results */}
       {isSearching && (
         <div className="border border-gray-100 rounded overflow-hidden max-h-[400px] overflow-y-auto mt-4">
-          {filteredEmployees.map((c) => (
+          {filteredEmployees.map((e) => (
             <div
-              key={c.id}
+              key={e.id}
               // onClick={() => !isSearching}   i must implement detail employee page to see employee profile of individual
+              onClick={() => onView(e)}
               className="p-6 hover:bg-gray-50 cursor-pointer border-b border-gray-50 flex justify-between items-center"
             >
               <div>
                 <p className="font-bold text-base text-brand-blue">
-                  {c.firstName} {c.lastName}
+                  {e.firstName} {e.lastName}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {c.email} | {c.phone}
+                  {e.email} | {e.phone}
                 </p>
               </div>
               <CheckCircle size={24} className="text-gray-300" />
@@ -167,6 +168,12 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
                         title="Delete"
                       >
                         <Trash2 size={18} />
+                      </button>
+                      <button
+                        onClick={() => onView(emp)}
+                        className="text-gray-400 hover:text-brand-blue"
+                      >
+                        <ExternalLink size={18} />
                       </button>
                     </td>
                   </tr>
