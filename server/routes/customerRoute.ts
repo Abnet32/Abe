@@ -1,12 +1,13 @@
 import express from "express";
 import {
-  registerCustomer,
   customerLogin,
+  getAllCustomers
 } from "../controllers/customerController.ts";
 
 const router = express.Router();
 
 router.post("/login", customerLogin);
-router.post("/register", registerCustomer);
+router.get("/", getAllCustomers);
+
 
 export default router;

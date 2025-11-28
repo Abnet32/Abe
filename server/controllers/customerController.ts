@@ -1,8 +1,6 @@
 import type { Request, Response } from "express";
 import CustomerIdentifier from "../models/CustomerIdentifier.ts";
 import CustomerInfo from "../models/CustomerInfo.ts";
-import Vehicle from "../models/Vehicle.ts";
-import bcrypt from "bcryptjs"; // optional if you want password
 import jwt from "jsonwebtoken";
 
 export const customerLogin = async (req: Request, res: Response) => {
@@ -36,49 +34,30 @@ export const customerLogin = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-export const registerCustomer = async (req: Request, res: Response) => {
+
+// GET all customers
+export const getAllCustomers = async (req: Request, res: Response) => {
   try {
-    const { email, phone, firstName, lastName, vehicles } = req.body;
+    // Populate customer info
+    const customers = await CustomerIdentifier.find().lean();
 
-    // Check if customer exists
-    const existing = await CustomerIdentifier.findOne({ email });
-    if (existing)
-      return res.status(400).json({ message: "Customer already exists" });
+    const customerData = await Promise.all(
+      customers.map(async (cust) => {
+        const info = await CustomerInfo.findOne({ customer_id: cust._id }).lean();
+        return {
+          id: cust._id,
+          email: cust.email,
+          phone: cust.phone_number,
+          firstName: info?.first_name || "",
+          lastName: info?.last_name || "",
+          active: true, // default if not stored, or you can add `active` in model
+        };
+      })
+    );
 
-    // Create customer identifier
-    const customer = await CustomerIdentifier.create({
-      email,
-      phone_number: phone,
-      customer_hash: `cust_${Date.now()}`, // simple hash
-    });
-
-    // Create customer info
-    await CustomerInfo.create({
-      customer_id: customer._id,
-      first_name: firstName,
-      last_name: lastName,
-    });
-
-    // Create vehicles (array of vehicles)
-    if (vehicles && vehicles.length > 0) {
-      for (const v of vehicles) {
-        await Vehicle.create({
-          customer_id: customer._id,
-          year: v.year,
-          make: v.make,
-          model: v.model,
-          mileage: v.mileage,
-          tag: v.tag,
-        });
-      }
-    }
-
-    res.status(201).json({
-      message: "Customer registered successfully",
-      customer_id: customer._id,
-    });
-  } catch (error) {
-    console.error(error);
+    res.json(customerData);
+  } catch (err) {
+    console.error("Failed to fetch customers:", err);
     res.status(500).json({ message: "Server error" });
   }
 };

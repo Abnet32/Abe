@@ -21,3 +21,14 @@ export const updateCustomer = async (id: string, data: CustomerData) => {
   const response = await axios.put(`${API_URL}/${id}`, data);
   return response.data;
 };
+
+// get all customers
+export const getCustomers = async () => {
+  try {
+    const response = await axios.get(API_URL);
+    return response.data;
+  } catch (err: any) {
+    console.error("Failed to fetch customers:", err);
+    throw err;
+  }
+};
