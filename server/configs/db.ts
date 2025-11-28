@@ -1,33 +1,21 @@
 import mongoose from "mongoose";
-import type { ConnectOptions } from "mongoose";
 
 const connectDB = async (): Promise<void> => {
+  const mongodbURL = process.env.MONGODB_URL;
+  const dbName = "abe-garage";
+
+  if (!mongodbURL) {
+    throw new Error("MONGODB_URL not set in .env");
+  }
+
+  const fullURL = `${mongodbURL}/${dbName}`;
+
   try {
-    mongoose.connection.on("connected", () => {
-      console.log("Database connected successfully");
-    });
-
-    let mongodbURL: string | undefined = process.env.MONGODB_URL;
-    const projectName = "abe-garage";
-
-    if (!mongodbURL) {
-      throw new Error("MONGODB_URL environment variable not set");
-    }
-
-    // Remove trailing slash
-    if (mongodbURL.endsWith("/")) {
-      mongodbURL = mongodbURL.slice(0, -1);
-    }
-
-    const fullURL = `${mongodbURL}/${projectName}`;
-
-    await mongoose.connect(fullURL, {
-      // Optional, but good for TS and future configs
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as ConnectOptions);
+    await mongoose.connect(fullURL); // ✅ No options
+    console.log("Database connected successfully");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
+    process.exit(1);
   }
 };
 
