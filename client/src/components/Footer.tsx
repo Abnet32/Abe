@@ -71,7 +71,7 @@ const Footer: React.FC<FooterProps> = ({
               <p className="text-base text-white font-heading">
                 Addis Ababa, Ethiopia
               </p>
-              <p className="text-xs text-gray-400">4 Kilo, Addis Ababa</p>
+              <p className="text-xs text-gray-400">6 Kilo, Addis Ababa</p>
             </div>
           </div>
           <div className="flex items-center gap-4 mb-4 md:mb-0">
