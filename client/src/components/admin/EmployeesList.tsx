@@ -1,11 +1,11 @@
 import React from "react";
-import type { Employee } from "../../types.ts";
+import type { EmployeeData } from "../../api/employee";
 import { Edit, Trash2 } from "lucide-react";
 
 interface EmployeesListProps {
-  employees: Employee[];
-  onEdit: (employee: Employee) => void;
-  onDelete: (id: number) => void;
+  employees: (EmployeeData & { id: string; addedDate: string })[];
+  onEdit: (employee: EmployeeData & { id: string }) => void;
+  onDelete: (id: string) => void;
 }
 
 const EmployeesList: React.FC<EmployeesListProps> = ({

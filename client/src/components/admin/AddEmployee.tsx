@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import type { Employee } from "../../types.ts";
+import type { EmployeeData } from "../../api/employee";
 import { AlertCircle } from "lucide-react";
 
 interface AddEmployeeProps {
-  onSubmit: (employee: Omit<Employee, "id" | "addedDate">) => void;
-  initialData?: Employee;
+  onSubmit: (employee: EmployeeData) => void;
+  initialData?: EmployeeData & { id?: string };
   isEditing?: boolean;
 }
 
@@ -13,12 +13,12 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
   initialData,
   isEditing = false,
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EmployeeData>({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    role: "Employee" as Employee["role"],
+    role: "Employee",
     password: "",
     active: true,
   });
@@ -33,26 +33,19 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
         email: initialData.email,
         phone: initialData.phone,
         role: initialData.role,
-        password: initialData.password || "",
+        password: "",
         active: initialData.active,
       });
     }
   }, [initialData]);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const validatePhone = (phone: string) => {
-    // Allows +, spaces, dashes, parentheses, and digits. Requires at least 10 characters.
-    const phoneRegex = /^\+?[\d\s-()]{10,}$/;
-    return phoneRegex.test(phone);
-  };
+  const validatePhone = (phone: string) => /^\+?[\d\s-()]{10,}$/.test(phone);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     const newErrors: { email?: string; phone?: string } = {};
     let isValid = true;
 
@@ -68,9 +61,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
 
     setErrors(newErrors);
 
-    if (isValid) {
-      onSubmit(formData);
-    }
+    if (isValid) onSubmit(formData);
   };
 
   const handleChange = (
@@ -78,7 +69,6 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
   ) => {
     const { name, value, type } = e.target;
 
-    // Clear error for the field being edited
     if (name === "email" || name === "phone") {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -107,6 +97,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
         className="bg-white p-10 shadow-sm rounded-lg space-y-8"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Email */}
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               Employee Email
@@ -131,6 +122,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
               </div>
             )}
           </div>
+
+          {/* First Name */}
           <div>
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               First Name
@@ -145,6 +138,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
               className="w-full p-4 border border-gray-200 rounded text-sm focus:outline-none focus:border-brand-red bg-white text-gray-800"
             />
           </div>
+
+          {/* Last Name */}
           <div>
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               Last Name
@@ -159,6 +154,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
               className="w-full p-4 border border-gray-200 rounded text-sm focus:outline-none focus:border-brand-red bg-white text-gray-800"
             />
           </div>
+
+          {/* Phone */}
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               Phone
@@ -183,6 +180,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
               </div>
             )}
           </div>
+
+          {/* Role */}
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               Role
@@ -198,6 +197,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
               <option value="Admin">Admin</option>
             </select>
           </div>
+
+          {/* Password */}
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
               Password
@@ -216,6 +217,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
               className="w-full p-4 border border-gray-200 rounded text-sm focus:outline-none focus:border-brand-red bg-white text-gray-800"
             />
           </div>
+
+          {/* Active */}
           <div className="md:col-span-2 flex items-center gap-3">
             <input
               type="checkbox"

@@ -36,12 +36,13 @@
 }
 
 @font-face {
-  font-family: "Benaiah";
-  src: url("/fonts/Benaiah.ttf") format("truetype");
+  font-family: 'Benaiah';
+  src: url('/fonts/Benaiah.woff2') format('woff2'),
+       url('/fonts/Benaiah.woff') format('woff');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
 }
+
 /* Utility to force Amharic font specifically */
 .font-amharic {
   font-family: "Benaiah", "Noto Serif Ethiopic", serif;
