@@ -5,6 +5,8 @@ import type{ Request, Response, NextFunction } from "express";
 import cors from "cors";
 import connectDB from "./configs/db.ts";
 import authRoutes from "./routes/authRoute.ts";
+import customerRoutes from "./routes/customerRoute.ts";
+
 
 
 const app = express();
@@ -18,7 +20,9 @@ await connectDB();
 app.get("/", (req: Request, res: Response) => res.send("Server is live..."));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+
+app.use("/api/customers", customerRoutes);
+
 
 
 app.listen(PORT, () => {
