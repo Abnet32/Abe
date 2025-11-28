@@ -30,6 +30,12 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
   // Filter data specifically for this customer just in case, though parent should pass filtered data
   const customerOrders = orders.filter((o) => o.customerId === customer.id);
   const customerVehicles = vehicles.filter((v) => v.customerId === customer.id);
+  const dateObj = new Date(customer.addedDate);
+  const formattedDate = dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long", // 'long' gives "January", "February", etc.
+    day: "numeric",
+  });
 
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-8">
@@ -101,7 +107,7 @@ const CustomerDetail: React.FC<CustomerDetailProps> = ({
                 <div className="flex items-center gap-3 text-brand-blue font-bold">
                   <Calendar size={18} className="text-brand-blue" />
                   <span className="text-sm">
-                    Member since {customer.addedDate}
+                   since {formattedDate}
                   </span>
                 </div>
               </div>
