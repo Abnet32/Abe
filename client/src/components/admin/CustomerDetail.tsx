@@ -16,7 +16,7 @@ interface CustomerDetailProps {
   customer: Customer;
   orders: Order[];
   vehicles: Vehicle[];
-  onBack: () => void;
+  // onBack: () => void;
   onEdit: (customer: Customer) => void;
 }
 

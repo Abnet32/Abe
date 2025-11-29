@@ -21,7 +21,7 @@ import type {
   Service,
   Order,
   InventoryItem,
-  AdminView
+  AdminView,
 } from "../types.ts";
 
 // Sub-components
@@ -31,6 +31,7 @@ import OrdersList from "./admin/OrdersList";
 import CreateOrder from "./admin/CreateOrder";
 import EmployeesList from "./admin/EmployeesList";
 import AddEmployee from "./admin/AddEmployee";
+import EmployeeDetail from "./admin/EmployeeDetail.tsx";
 import CustomersList from "./admin/CustomersList";
 import AddCustomer from "./admin/AddCustomer";
 import CustomerDetail from "./admin/CustomerDetail";
@@ -39,8 +40,6 @@ import InventoryManager from "./admin/InventoryManager";
 import AppointmentCalendar from "./admin/AppointmentCalendar";
 
 import Footer from "./Footer";
-
-
 
 interface AdminDashboardProps {
   onNavigate: (view: AdminView, sectionId?: string) => void;
@@ -284,10 +283,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
-    const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(
-      null
-    );
-
+  const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(null);
+  const [viewingEmployee, setViewingEmployee] = useState<Employee | null>(null);
 
   // --- Actions ---
 
@@ -319,7 +316,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingEmployee(null);
     setCurrentView("employees");
   };
-
+  const handleViewEmployee = (emp: Employee) => {
+    setViewingEmployee(emp);
+    setCurrentView("employee-detail");
+  };
   const handleDeleteEmployee = (id: number) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       setEmployees(employees.filter((e) => e.id !== id));
@@ -484,7 +484,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             employees={employees}
             onEdit={handleEditOrder}
             onUpdateStatus={updateOrderStatus}
-            onViewCustomer={handleViewCustomer} 
+            onViewCustomer={handleViewCustomer}
           />
         );
       case "new-order":
@@ -521,13 +521,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           />
         );
       case "employees":
-        return (
-          <EmployeesList
-            employees={employees}
-            onEdit={handleEditEmployee}
-            onDelete={handleDeleteEmployee}
-          />
-        );
+         return (
+           <EmployeesList
+             employees={employees}
+             onEdit={handleEditEmployee}
+             onDelete={handleDeleteEmployee}
+             onView={handleViewEmployee} // <-- ADD THIS
+           />
+         );
       case "add-employee":
         return <AddEmployee onSubmit={handleAddEmployee} />;
       case "edit-employee":
@@ -536,6 +537,25 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             onSubmit={handleUpdateEmployee}
             initialData={editingEmployee || undefined}
             isEditing
+          />
+        );
+      case "employee-detail":
+        return viewingEmployee ? (
+          <EmployeeDetail
+            employee={viewingEmployee}
+            orders={orders}
+            vehicles={vehicles}
+            customers={customers}
+            onBack={() => setCurrentView("employees")}
+            onEdit={handleEditEmployee}
+            onView={handleViewEmployee}
+          />
+        ) : (
+          <EmployeesList
+            employees={employees}
+            onEdit={handleEditEmployee}
+            onDelete={handleDeleteEmployee}
+            onView={handleViewEmployee} // <-- ADD THIS TOO
           />
         );
       case "customers":

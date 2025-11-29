@@ -1,14 +1,14 @@
 import React from "react";
 import type { Employee, Order, Vehicle, Customer } from "../../types";
 
-import { Phone, Mail, Calendar, FileText, User, Edit, Car } from "lucide-react";
+import { Phone, Mail, Calendar, FileText, User, Edit } from "lucide-react";
 
 interface EmployeeDetailProps {
   employee: Employee;
   orders: Order[];
   vehicles: Vehicle[];
   customers: Customer[];
-  onBack: () => void;
+  // onBack: () => void;
   onEdit: (employee: Employee) => void;
 }
 
@@ -17,7 +17,7 @@ const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
   orders,
   vehicles,
   customers,
-  onBack,
+  // onBack,
   onEdit,
 }) => {
   const employeeOrders = orders.filter((o) => o.employeeId === employee.id);
@@ -33,12 +33,12 @@ const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-8">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <button
+        {/* <button
           onClick={onBack}
           className="p-2 rounded-full bg-white shadow-sm text-brand-blue hover:bg-gray-100"
         >
           ←
-        </button>
+        </button> */}
 
         <div>
           <h2 className="text-3xl md:text-4xl font-bold text-brand-blue font-heading relative inline-block">

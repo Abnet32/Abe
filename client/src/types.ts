@@ -33,7 +33,8 @@ export type AdminView =
   | "add-customer"
   | "edit-customer"
   | "services"
-  | "customer-detail";
+  | "customer-detail"
+  | "employee-detail"
 // Admin / Database Types
 
 export interface Employee {

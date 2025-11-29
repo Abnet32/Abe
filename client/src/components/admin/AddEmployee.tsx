@@ -4,8 +4,8 @@ import {
   addEmployee,
   updateEmployee,
   deleteEmployee,
-  EmployeeData,
-} from "../../api/employee";
+  type EmployeeData,
+} from "../../api/employee.ts";
 
 interface AddEmployeeProps {
   initialData?: EmployeeData & { id?: string };
