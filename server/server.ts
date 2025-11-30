@@ -7,6 +7,7 @@ import connectDB from "./configs/db.ts";
 import authRoutes from "./routes/authRoute.ts";
 import customerRoutes from "./routes/customerRoute.ts";
 import employeeRoutes from "./routes/employeeRoute.ts";
+import orderRoutes from "./routes/orderRoute.ts"
 
 
 
@@ -24,6 +25,8 @@ app.get("/", (req: Request, res: Response) => res.send("Server is live..."));
 app.use("/api/auth", authRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/employees", employeeRoutes);
+app.use("/api/orders", orderRoutes);
+
 
 
 
