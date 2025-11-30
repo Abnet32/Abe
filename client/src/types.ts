@@ -75,14 +75,13 @@ export interface Vehicle {
 }
 
 export interface Service {
-  id: number;
+  id: string;
   name: string;
   description: string;
   view?: AdminView;
   names: string;
   descriptions: string;
 }
-
 export interface Order {
   id: number;
   customerId: number;

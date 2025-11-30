@@ -366,19 +366,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   // Service Actions
-  const addService = (srv: Omit<Service, "id">) => {
-    setServices([...services, { ...srv, id: Date.now() }]);
-  };
+  // const addService = (srv: Omit<Service, "id">) => {
+  //   setServices([...services, { ...srv, id: Date.now() }]);
+  // };
 
-  const updateService = (id: number, srv: Omit<Service, "id">) => {
-    setServices(services.map((s) => (s.id === id ? { ...s, ...srv } : s)));
-  };
+  // const updateService = (id: number, srv: Omit<Service, "id">) => {
+  //   setServices(services.map((s) => (s.id === id ? { ...s, ...srv } : s)));
+  // };
 
-  const deleteService = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this service?")) {
-      setServices(services.filter((s) => s.id !== id));
-    }
-  };
+  // const deleteService = (id: number) => {
+  //   if (window.confirm("Are you sure you want to delete this service?")) {
+  //     setServices(services.filter((s) => s.id !== id));
+  //   }
+  // };
 
   // Vehicle & Order Actions
   const addVehicle = (veh: Omit<Vehicle, "id">) => {
@@ -618,10 +618,10 @@ const role = localStorage.getItem("role");
       case "services":
         return (
           <ServicesManager
-            services={services}
-            onAdd={addService}
-            onUpdate={updateService}
-            onDelete={deleteService}
+            // services={services}
+            // onAdd={addService}
+            // onUpdate={updateService}
+            // onDelete={deleteService}
           />
         );
       default:
