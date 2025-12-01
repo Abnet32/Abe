@@ -1,68 +1,95 @@
 import React, { useState, useEffect } from "react";
-import Header from "./components/Header.tsx";
-import Hero from "./components/Hero.tsx";
-import About from "./components/About.tsx";
-import Services from "./components/Services.tsx";
-import QualitySection from "./components/QualitySection.tsx";
-import WhyChooseUs from "./components/WhyChooseUs.tsx";
-import LeaderBanner from "./components/LeaderBanner.tsx";
-import Footer from "./components/Footer.tsx";
-import ChatWidget from "./components/ChatWidget.tsx";
-import Login from "./components/Login.tsx";
-import AdminDashboard from "./components/AdminDashboard.tsx";
-import ContactPage from "./components/ContactPage.tsx";
-import AboutPage from "./components/AboutPage.tsx";
-import ServicesPage from "./components/ServicesPage.tsx";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import About from "./components/About";
+import Services from "./components/Services";
+import QualitySection from "./components/QualitySection";
+import WhyChooseUs from "./components/WhyChooseUs";
+import LeaderBanner from "./components/LeaderBanner";
+import Footer from "./components/Footer";
+import ChatWidget from "./components/ChatWidget";
+import Login from "./components/Login";
+import AdminDashboard from "./components/AdminDashboard";
+import ContactPage from "./components/ContactPage";
+import AboutPage from "./components/AboutPage";
+import ServicesPage from "./components/ServicesPage";
 
 type ViewState = "home" | "login" | "admin" | "contact" | "about" | "services";
 
-const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewState>("home");
-  // Default to true for demo purposes as requested
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [scrollTarget, setScrollTarget] = useState<string | null>(null);
+interface User {
+  token: string;
+  role: string;
+}
 
-  // Chat State
+// Wrapper to sync route with currentView
+const AppWrapper: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+  const [currentView, setCurrentView] = useState<ViewState>("home");
+  const [scrollTarget, setScrollTarget] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInitialMessage, setChatInitialMessage] = useState<string>("");
 
-  // Handle scrolling after view change
   useEffect(() => {
-    if (currentView === "home" && scrollTarget) {
-      const timer = setTimeout(() => {
-        const element = document.getElementById(scrollTarget);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-        setScrollTarget(null);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [currentView, scrollTarget]);
+    // Determine current view from pathname
+    const path = location.pathname.replace("/", "");
+    const viewMap: Record<string, ViewState> = {
+      "": "home",
+      login: "login",
+      admin: "admin",
+      contact: "contact",
+      about: "about",
+      services: "services",
+    };
+    setCurrentView(viewMap[path] || "home");
+  }, [location]);
 
- const handleLogin = (token: string, role: string) => {
-   localStorage.setItem("token", token);
-   localStorage.setItem("role", role);
-   setIsLoggedIn(true);
-   setCurrentView("admin");
- };
+  useEffect(() => {
+    // Load user from localStorage
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (token && role) setUser({ token, role });
+  }, []);
 
+  const handleLogin = (token: string, role: string) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    setUser({ token, role });
+    navigate(role === "admin" ? "/admin" : "/");
+  };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setCurrentView("home");
-    window.scrollTo(0, 0);
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setUser(null);
+    navigate("/");
   };
 
   const handleNavigate = (view: ViewState, sectionId?: string) => {
     setCurrentView(view);
 
-    if (view === "home") {
-      if (sectionId) {
-        setScrollTarget(sectionId);
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
+    // Map view to route
+    const pathMap: Record<ViewState, string> = {
+      home: "/",
+      login: "/login",
+      admin: "/admin",
+      contact: "/contact",
+      about: "/about",
+      services: "/services",
+    };
+    navigate(pathMap[view]);
+
+    if (view === "home" && sectionId) {
+      setScrollTarget(sectionId);
     } else {
       window.scrollTo(0, 0);
     }
@@ -74,13 +101,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800">
-      {/* Only show public Header if NOT in admin view */}
+    <>
       {currentView !== "admin" && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}
-          isLoggedIn={isLoggedIn}
+          isLoggedIn={!!user}
           onLogout={handleLogout}
         />
       )}
@@ -98,21 +124,16 @@ const App: React.FC = () => {
         )}
 
         {currentView === "login" && <Login onLogin={handleLogin} />}
-
-        {currentView === "admin" && (
+        {currentView === "admin" && user?.role === "admin" && (
           <AdminDashboard onNavigate={handleNavigate} onLogout={handleLogout} />
         )}
-
         {currentView === "contact" && <ContactPage />}
-
         {currentView === "about" && <AboutPage onNavigate={handleNavigate} />}
-
         {currentView === "services" && (
           <ServicesPage onLearnMore={handleOpenChatWithPrompt} />
         )}
       </main>
 
-      {/* Hide Footer on Admin pages to remove 'Schedule Your Appointment' banner */}
       {currentView !== "admin" && <Footer onNavigate={handleNavigate} />}
 
       <ChatWidget
@@ -120,8 +141,14 @@ const App: React.FC = () => {
         setIsOpen={setIsChatOpen}
         initialMessage={chatInitialMessage}
       />
-    </div>
+    </>
   );
 };
+
+const App: React.FC = () => (
+  <Router>
+    <AppWrapper />
+  </Router>
+);
 
 export default App;
