@@ -10,6 +10,7 @@ import employeeRoutes from "./routes/employeeRoute.ts";
 import orderRoutes from "./routes/orderRoute.ts"
 import serviceRoute from "./routes/serviceRoute.ts"
 import inventoryRoute from "./routes/inventoryRoute.ts";
+import vehicleRoute from "./routes/vehicleRoute.ts"
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -27,6 +28,7 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/services", serviceRoute);
 app.use("/api/inventories", inventoryRoute);
+app.use("/api/vehicles", vehicleRoute)
 
 app.listen(PORT, () => {
   console.log(`server is running on http://localhost:${PORT}`);
