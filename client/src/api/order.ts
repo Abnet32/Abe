@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/api/order.ts
 import axios from "axios";
 import type { Order } from "../types";
