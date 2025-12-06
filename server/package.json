@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.js",
   "type": "module",
- "scripts": {
+"scripts": {
   "build": "tsc",
-  "start": "node dist/server.js",
-  "dev": "nodemon --watch . --ext ts,json --exec ts-node server.ts",
-  "seed": "ts-node scripts/seed.ts"
+  "start": "node dist/server/server.js",
+  "dev": "nodemon --watch . --ext ts,json --exec ts-node server/server.ts",
+  "seed": "ts-node server/scripts/seed.ts"
 },
 
   "author": "",

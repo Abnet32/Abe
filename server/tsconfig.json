@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["server/**/*", "models/**/*", "configs/**/*", "scripts/**/*"]
+  "include": ["server.ts", "models/**/*", "configs/**/*", "scripts/**/*"]
 }
