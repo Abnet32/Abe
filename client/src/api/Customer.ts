@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/customers"; // adjust your backend endpoint
+const API_URL = `${import.meta.env.VITE_BASE_API_URL}/customers`;
 
 export interface CustomerData {
   firstName: string;

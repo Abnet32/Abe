@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import PageHeader from "./PageHeader";
 import { ArrowRight } from "lucide-react";

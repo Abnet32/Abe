@@ -2,7 +2,7 @@
 // src/api/service.ts
 import type { Service } from "../types.ts";
 
-const API_URL = "http://localhost:5000/api/services"; // adjust if needed
+const API_URL = `${import.meta.env.VITE_BASE_API_URL}/services`;
 
 // ✅ Convert backend → frontend format
 const transform = (s: any): Service => ({
@@ -10,7 +10,7 @@ const transform = (s: any): Service => ({
   name: s.service_name,
   description: s.service_description,
   names: "",
-  descriptions: ""
+  descriptions: "",
 });
 
 export const getServices = async (): Promise<Service[]> => {

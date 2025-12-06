@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Package,
 } from "lucide-react";
+import type { AdminView } from "../../types";
 
 // ---------------- TYPES ----------------
 export interface DashboardItem {

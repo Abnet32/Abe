@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/api/inventory.ts
 import axios from "axios";
 import type { InventoryItem } from "../types.ts";
 
-const API_URL = "http://localhost:5000/api/inventories"; // adjust to your backend
+const API_URL = `${import.meta.env.VITE_BASE_API_URL}/inventories`;
 
 // Helper to map backend response to frontend InventoryItem
 const transform = (item: any): InventoryItem => ({

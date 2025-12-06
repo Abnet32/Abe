@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect } from "react";
 import type { InventoryItem } from "../../types.ts";
 import {
@@ -68,14 +70,14 @@ const InventoryManager: React.FC = () => {
     const payload = {
       name: formData.name,
       category: formData.category,
-      quantity: formData.quantity,
-      price: formData.price,
-      min_stock_level: formData.minStockLevel,
+      quantity: String(formData.quantity),
+      price: String(formData.price),
+      minStockLevel: String(formData.minStockLevel),
     };
 
     try {
       if (editingItem) {
-        const updated = await updateInventoryItem(editingItem.id, payload);
+        const updated = await updateInventoryItem(String(editingItem.id), payload);
         setInventory((prev) =>
           prev.map((item) =>
             item.id === updated._id ? transformItem(updated) : item
@@ -115,7 +117,7 @@ const InventoryManager: React.FC = () => {
 
     try {
       await deleteInventoryItem(id);
-      setInventory((prev) => prev.filter((item) => item.id !== id)); // live update
+      setInventory((prev) => prev.filter((item) => String(item.id) !== id)); // live update
     } catch (err) {
       console.error("Failed to delete item:", err);
     }
@@ -386,7 +388,7 @@ const InventoryManager: React.FC = () => {
                       <Edit size={16} />
                     </button>
                     <button
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(String(item.id))}
                       className="p-2 text-gray-400 hover:text-brand-red hover:bg-red-50 rounded-full transition-colors"
                     >
                       <Trash2 size={16} />

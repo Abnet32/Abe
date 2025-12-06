@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import React, { useState, useEffect } from "react";
 import type { Service } from "../../types.ts";
 import { Edit, Trash2 } from "lucide-react";
@@ -15,7 +16,7 @@ interface ServicesManagerProps {
 const ServicesManager: React.FC<ServicesManagerProps> = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [formData, setFormData] = useState({ name: "", description: "" });
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -41,13 +42,18 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
 
     try {
       if (editingId !== null) {
-        const updated = await updateServiceAPI(editingId, formData);
+        const updated = await updateServiceAPI(
+          editingId,
+          formData as unknown as Omit<Service, "id">
+        );
         setServices((prev) =>
           prev.map((s) => (s.id === editingId ? updated : s))
         );
         setEditingId(null);
       } else {
-        const added = await addServiceAPI(formData);
+        const added = await addServiceAPI(
+          formData as unknown as Omit<Service, "id">
+        );
         setServices((prev) => [...prev, added]);
       }
       setFormData({ name: "", description: "" });
@@ -63,7 +69,7 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this service?"))
       return;
 

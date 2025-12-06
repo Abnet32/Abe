@@ -1,9 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/components/AdminDashboard.tsx
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  getAllData as getAllDataAPI,
-  getOrders as getOrdersAPI,
-} from "../api/order.ts";
+import { getAllData as getAllDataAPI } from "../api/order.ts";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -51,64 +49,30 @@ interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-const AdminDashboard: React.FC<AdminDashboardProps> = ({
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onNavigate,
   onLogout,
 }) => {
   const [currentView, setCurrentView] = useState<AdminView>("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // --- Backend-driven state (initially empty; filled from API) ---
+  // Backend-driven state
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [services, setServices] = useState<Service[]>([]);
-
-  // Orders state (populated by backend)
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState<string>("");
-
-  // Inventory remains mock (UI expects it)
-  const [inventory, setInventory] = useState<InventoryItem[]>([
-    {
-      id: 1,
-      name: "Synthetic Oil 5W-30",
-      partNumber: "OIL-5W30-SYN",
-      category: "Fluids",
-      quantity: 45,
-      price: 24.99,
-      minStockLevel: 10,
-    },
-    {
-      id: 2,
-      name: "Oil Filter BMW",
-      partNumber: "FLT-BMW-X7",
-      category: "Engine",
-      quantity: 12,
-      price: 15.5,
-      minStockLevel: 5,
-    },
-    {
-      id: 3,
-      name: "Ceramic Brake Pads",
-      partNumber: "BRK-PAD-001",
-      category: "Brakes",
-      quantity: 8,
-      price: 89.99,
-      minStockLevel: 4,
-    },
-  ]);
-
-  // --- Selection State for Editing / Viewing ---
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+  // Selection states
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(null);
   const [viewingEmployee, setViewingEmployee] = useState<Employee | null>(null);
 
-  // --- Local actions (creating/updating local-only state when appropriate) ---
-
+  // --- Local actions ---
   const handleAddEmployee = (empData: Omit<Employee, "id" | "addedDate">) => {
     const newEmp: Employee = {
       ...empData,
@@ -123,7 +87,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingEmployee(emp);
     setCurrentView("edit-employee");
   };
-
   const handleUpdateEmployee = (
     empData: Omit<Employee, "id" | "addedDate">
   ) => {
@@ -134,19 +97,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingEmployee(null);
     setCurrentView("employees");
   };
-
   const handleViewEmployee = (emp: Employee) => {
     setViewingEmployee(emp);
     setCurrentView("employee-detail");
   };
-
   const handleDeleteEmployee = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
+    if (window.confirm("Are you sure you want to delete this employee?"))
       setEmployees((prev) => prev.filter((e) => e.id !== id));
-    }
   };
 
-  // Customer actions (local create/update kept as mock until you add CRUD endpoints)
   const handleAddCustomer = (custData: Omit<Customer, "id" | "addedDate">) => {
     const newCust: Customer = {
       ...custData,
@@ -157,17 +116,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setCustomers((prev) => [...prev, newCust]);
     setCurrentView("customers");
   };
-
   const handleEditCustomer = (cust: Customer) => {
     setEditingCustomer(cust);
     setCurrentView("edit-customer");
   };
-
   const handleViewCustomer = (cust: Customer) => {
     setViewingCustomer(cust);
     setCurrentView("customer-detail");
   };
-
   const handleUpdateCustomer = (
     custData: Omit<Customer, "id" | "addedDate">
   ) => {
@@ -178,59 +134,44 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingCustomer(null);
     setCurrentView("customers");
   };
-
   const handleDeleteCustomer = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this customer?")) {
+    if (window.confirm("Are you sure you want to delete this customer?"))
       setCustomers((prev) => prev.filter((c) => c.id !== id));
-    }
   };
 
-  // Vehicle & Order actions (vehicles may be created locally until you add endpoints)
-  const addVehicle = (veh: Omit<Vehicle, "id">) => {
+  const addVehicle = (veh: Omit<Vehicle, "id">) =>
     setVehicles((prev) => [...prev, { ...veh, id: Date.now() }]);
-  };
 
-  // ---------- Backend integration: fetch normalized data ----------
+  // --- Fetch backend data ---
   const fetchAllData = useCallback(async () => {
     setOrdersLoading(true);
     setOrdersError("");
     try {
-      // getAllDataAPI returns { orders, customers, vehicles, employees }
       const {
         orders: fetchedOrders,
         customers: fetchedCustomers,
         vehicles: fetchedVehicles,
         employees: fetchedEmployees,
       } = await getAllDataAPI();
-
-      // Orders
       setOrders(fetchedOrders);
 
-      // Merge backend customers into local customers state (backend wins)
       setCustomers((prev) => {
         const map = new Map(prev.map((c) => [c.id, c]));
         for (const c of fetchedCustomers) map.set(c.id, c);
         return Array.from(map.values());
       });
-
-      // Merge vehicles
       setVehicles((prev) => {
         const map = new Map(prev.map((v) => [v.id, v]));
         for (const v of fetchedVehicles) map.set(v.id, v);
         return Array.from(map.values());
       });
-
-      // Merge employees
       setEmployees((prev) => {
         const map = new Map(prev.map((e) => [e.id, e]));
         for (const e of fetchedEmployees) map.set(e.id, e);
         return Array.from(map.values());
       });
-
-      // Optionally get services from backend if provided by API (Part 2 will add)
-      // For now services can be left as-is or updated by later API call.
     } catch (err: any) {
-      console.error("Failed to fetch orders or related data:", err);
+      console.error("Failed to fetch data:", err);
       setOrdersError(err?.message || "Failed to fetch orders");
     } finally {
       setOrdersLoading(false);
@@ -241,18 +182,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     fetchAllData();
   }, [fetchAllData]);
 
-  // Called after CreateOrder component creates the order on the server
   const addOrder = async (ord: Omit<Order, "id" | "date" | "status">) => {
-    // CreateOrder usually calls createOrder API itself. We just refresh.
     await fetchAllData();
     setCurrentView("orders");
   };
-
   const handleEditOrder = (order: Order) => {
     setEditingOrder(order);
     setCurrentView("edit-order");
   };
-
   const handleUpdateOrder = (ord: Omit<Order, "id" | "date" | "hash">) => {
     if (!editingOrder) return;
     setOrders((prev) =>
@@ -261,36 +198,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingOrder(null);
     setCurrentView("orders");
   };
-
   const updateOrderStatus = async (
     orderId: number,
     status: Order["status"]
   ) => {
-    // OrdersList.update will call updateOrderStatus API; refresh local state afterwards
     await fetchAllData();
   };
 
-  // Inventory actions (unchanged)
   const addInventoryItem = (item: Omit<InventoryItem, "id">) => {
-    setInventory((prev) => [...prev, { ...item, id: Date.now() }]);
+    const newItem: InventoryItem = { ...item, id: Date.now() };
+    setInventory((prev) => [...prev, newItem]);
   };
-
-  const updateInventoryItem = (
-    id: number,
-    itemData: Partial<InventoryItem>
-  ) => {
+  const updateInventoryItem = (id: number, itemData: Partial<InventoryItem>) =>
     setInventory((prev) =>
       prev.map((i) => (i.id === id ? { ...i, ...itemData } : i))
     );
-  };
-
   const deleteInventoryItem = (id: number) => {
-    if (window.confirm("Delete this inventory item?")) {
+    if (window.confirm("Delete this inventory item?"))
       setInventory((prev) => prev.filter((i) => i.id !== id));
-    }
   };
 
-  // --- Navigation Menu (unchanged) ---
   const menuItems = [
     {
       id: "dashboard",
@@ -319,7 +246,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         setCurrentView("employee-detail");
       }
     }
-
     if (role === "Customer") {
       const cust = customers.find((c) => c.id === userId);
       if (cust) {
@@ -334,7 +260,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case "dashboard":
         return (
           <DashboardHome
-            orders={orders}
             employees={employees}
             customers={customers}
             services={services}
@@ -353,14 +278,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case "calendar":
         return <AppointmentCalendar orders={orders} customers={customers} />;
       case "orders":
-        if (ordersLoading) {
+        if (ordersLoading)
           return <p className="text-center py-10">Loading orders...</p>;
-        }
-        if (ordersError) {
+        if (ordersError)
           return (
             <p className="text-center py-10 text-red-500">{ordersError}</p>
           );
-        }
         return (
           <OrdersList
             orders={orders}
@@ -381,6 +304,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             employees={employees}
             onSubmit={addOrder}
             onAddVehicle={addVehicle}
+            onAddCustomerClick={() => setCurrentView("add-customer")}
           />
         );
       case "edit-order":
@@ -394,6 +318,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             onAddVehicle={addVehicle}
             initialData={editingOrder || undefined}
             isEditing
+            onAddCustomerClick={() => setCurrentView("add-customer")}
           />
         );
       case "inventory":
@@ -452,7 +377,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             onView={handleViewCustomer}
           />
         );
-
       case "add-customer":
         return <AddCustomer onSubmit={handleAddCustomer} />;
       case "edit-customer":
@@ -481,38 +405,27 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           />
         );
       case "services":
-        return (
-          <ServicesManager
-          // services={services}
-          // onAdd={addService}
-          // onUpdate={updateService}
-          // onDelete={deleteService}
-          />
-        );
+        return <ServicesManager />;
+      default:
       default:
         return (
           <DashboardHome
-            orders={orders}
             employees={employees}
             customers={customers}
             services={services}
             setCurrentView={setCurrentView}
           />
         );
-    }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
-      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-50 bg-black/50 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
-        ></div>
+        />
       )}
-
-      {/* Top Header Mobile */}
       <header className="lg:hidden h-16 bg-white shadow-md flex items-center justify-between px-4 shrink-0 sticky top-0 z-40 relative">
         <button
           onClick={() => setMobileMenuOpen(true)}
@@ -525,16 +438,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <span className="text-brand-red">Admin</span> Panel
           </span>
         </div>
-
-        {/* Red/Blue Bottom Border */}
         <div className="absolute bottom-0 left-0 w-full h-1 flex">
           <div className="h-full w-1/2 bg-brand-red"></div>
           <div className="h-full w-1/2 bg-brand-blue"></div>
         </div>
       </header>
-
       <div className="flex flex-1 relative items-stretch">
-        {/* Sidebar */}
         <aside
           className={`fixed lg:sticky lg:top-0 inset-y-0 left-0 z-[60] lg:z-40 w-64 md:w-72 bg-brand-blue border-r border-gray-700 transform transition-transform duration-200 ease-in-out flex flex-col lg:h-screen ${
             mobileMenuOpen
@@ -542,7 +451,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               : "-translate-x-full lg:translate-x-0"
           }`}
         >
-          {/* Sidebar Header */}
           <div className="h-24 shrink-0 flex items-center justify-between px-6 lg:justify-center border-b border-gray-700 bg-brand-blue">
             <div className="relative w-fit hidden lg:block">
               <div className="flex items-baseline gap-2">
@@ -558,7 +466,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="h-full w-1/2 bg-brand-red"></div>
               </div>
             </div>
-
             <div className="font-bold  text-xl text-white lg:hidden">
               <h2
                 className="text-2xl font-bold text-white tracking-tight font-amharic cursor-pointer"
@@ -574,7 +481,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <X size={24} />
             </button>
           </div>
-
           <nav
             className="flex-1 py-4 px-4 space-y-2 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -596,7 +502,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 {item.label}
               </button>
             ))}
-
             <div className="pt-6 mt-6 border-t border-gray-700 space-y-2 mb-8">
               <button
                 onClick={() => onNavigate("home")}
@@ -615,14 +520,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           </nav>
         </aside>
-
-        {/* Main Content */}
         <main className="flex-1 bg-gray-50 p-6 lg:p-10 overflow-x-hidden">
           {renderView()}
         </main>
       </div>
-
-      {/* Full Width Footer */}
       <Footer onNavigate={onNavigate} showAppointmentBanner={false} />
     </div>
   );

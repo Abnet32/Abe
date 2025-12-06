@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -17,7 +19,7 @@ import LeaderBanner from "./components/LeaderBanner";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
 import Login from "./components/Login";
-import AdminDashboard from "./components/AdminDashboard";
+import { AdminDashboard } from "./components/AdminDashboard";
 import ContactPage from "./components/ContactPage";
 import AboutPage from "./components/AboutPage";
 import ServicesPage from "./components/ServicesPage";

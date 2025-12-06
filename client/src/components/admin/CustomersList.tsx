@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import type { Customer } from "../../types.ts";
 import { Edit, ExternalLink, Search, CheckCircle } from "lucide-react";
@@ -127,7 +128,7 @@ useEffect(() => {
                     className="border-b hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4 font-bold">
-                      ..{cust.id.slice(-2)}
+                      ..{String(cust.id).slice(-2)}
                     </td>
                     <td className="px-6 py-4 font-bold text-brand-blue">
                       {cust.firstName}

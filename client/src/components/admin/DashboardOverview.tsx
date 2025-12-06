@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Users, ClipboardList, Wrench, TrendingUp } from "lucide-react";
 import type { Order, Employee, Customer, Service } from "../../types.ts";

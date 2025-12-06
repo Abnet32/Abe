@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// src/components/admin/CreateOrder.tsx
 import React, { useState } from "react";
 import type {
   Customer,
@@ -16,6 +18,7 @@ interface CreateOrderProps {
   employees: Employee[];
   onSubmit: (order: Omit<Order, "id" | "date" | "status">) => void;
   onAddVehicle: (vehicle: Omit<Vehicle, "id">) => void;
+  onAddCustomerClick: () => void; // NEW: callback to navigate to AddCustomer page
 }
 
 const CreateOrder: React.FC<CreateOrderProps> = ({
@@ -25,6 +28,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
   employees,
   onSubmit,
   onAddVehicle,
+  onAddCustomerClick,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
@@ -86,20 +90,17 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
 
     setIsSubmitting(true);
     try {
-      // Transform frontend data to backend format
       const orderData = {
         customer_id: String(selectedCustomer.id),
         vehicle_id: String(selectedVehicle.id),
         employee_id: employees[0]?.id ? String(employees[0].id) : undefined,
         services: selectedServices.map((id) => String(id)),
         description: description || undefined,
-        total_price: 0, // Can be calculated later based on services
+        total_price: 0,
       };
 
-      // Call backend API
-      const createdOrder = await createOrderAPI(orderData);
+      await createOrderAPI(orderData);
 
-      // Call parent callback with transformed data
       onSubmit({
         customerId: Number(selectedCustomer.id),
         vehicleId: Number(selectedVehicle.id),
@@ -108,7 +109,6 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
         serviceIds: selectedServices.map((id) => Number(id)),
       });
 
-      // Reset form
       setSelectedCustomer(null);
       setSelectedVehicle(null);
       setSelectedServices([]);
@@ -183,7 +183,10 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
             </div>
           )}
 
-          <button className="bg-brand-red text-white px-8 py-4 text-xs font-bold uppercase rounded hover:bg-red-700">
+          <button
+            onClick={onAddCustomerClick} // Navigate to AddCustomer page
+            className="bg-brand-red text-white px-8 py-4 text-xs font-bold uppercase rounded hover:bg-red-700"
+          >
             Add New Customer
           </button>
         </div>

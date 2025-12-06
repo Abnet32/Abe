@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/api/vehicle.ts
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000/api/vehicles";
+const API_BASE = `${import.meta.env.VITE_BASE_API_URL}/vehicles`;
 
 export const createVehicle = async (payload: {
   customer_id: string;

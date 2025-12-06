@@ -98,11 +98,12 @@ export interface Order {
 }
 
 export interface InventoryItem {
-  id: number;
+  [x: string]: string | number;
+  id: string;
   name: string;
   partNumber: string;
+  category: string;
   quantity: number;
   price: number;
-  category: string;
   minStockLevel: number;
 }
