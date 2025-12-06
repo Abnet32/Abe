@@ -1,5 +1,9 @@
+// src/components/AdminDashboard.tsx
 import React, { useEffect, useState, useCallback } from "react";
-import { getOrders as getOrdersAPI } from "../api/order.ts";
+import {
+  getAllData as getAllDataAPI,
+  getOrders as getOrdersAPI,
+} from "../api/order.ts";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -54,161 +58,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [currentView, setCurrentView] = useState<AdminView>("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // --- Mock Database State ---
+  // --- Backend-driven state (initially empty; filled from API) ---
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
 
-  const [employees, setEmployees] = useState<Employee[]>([
-    {
-      id: 1,
-      firstName: "Admin",
-      lastName: "User",
-      email: "admin@autorex.com",
-      phone: "555-0101",
-      role: "Admin",
-      active: true,
-      addedDate: "2023-01-01",
-    },
-    {
-      id: 2,
-      firstName: "John",
-      lastName: "Mechanic",
-      email: "john@autorex.com",
-      phone: "555-0102",
-      role: "Employee",
-      active: true,
-      addedDate: "2023-02-15",
-    },
-  ]);
-
-  const [customers, setCustomers] = useState<Customer[]>([
-    {
-      id: 1,
-      firstName: "Jasmine",
-      lastName: "Albeshir",
-      email: "jasmine@gmail.com",
-      phone: "240-835-487",
-      active: true,
-      addedDate: "2023-05-20",
-      hash: "cust_123",
-    },
-    {
-      id: 2,
-      firstName: "Adugna",
-      lastName: "Bekele",
-      email: "test@evangadi.com",
-      phone: "202-386-2702",
-      active: true,
-      addedDate: "2023-06-10",
-      hash: "cust_456",
-    },
-  ]);
-
-  const [vehicles, setVehicles] = useState<Vehicle[]>([
-    {
-      id: 1,
-      customerId: 1,
-      year: "2020",
-      make: "BMW",
-      model: "X7",
-      type: "SUV",
-      mileage: "12000",
-      tag: "0101AD",
-      serial: "BM123456",
-      color: "Gold",
-    },
-    {
-      id: 2,
-      customerId: 2,
-      year: "2022",
-      make: "Tesla",
-      model: "Model S",
-      type: "Sedan",
-      mileage: "10000",
-      tag: "9890Ab2",
-      serial: "TS999888",
-      color: "Silver",
-    },
-  ]);
-
-  const [services, setServices] = useState<Service[]>([
-    {
-      id: 1,
-      names: "Overview",
-      descriptions: "Key performance indicators",
-      view: "overview",
-      name: "Oil Change",
-      description: "Synthetic oil change and filter replacement",
-    },
-    {
-      id: 2,
-      names: "Inventory",
-      descriptions: "Track parts, stock levels",
-      view: "inventory",
-      name: "Engine Tune-up",
-      description: "Spark plugs, air filter, and system check",
-    },
-    {
-      id: 3,
-      names: "Add Order",
-      descriptions: "Add new order",
-      view: "new-order",
-      name: "Brake Repair",
-      description: "Brake pad replacement and rotor resurfacing",
-    },
-    {
-      id: 4,
-      names: "All Orders",
-      descriptions: "Quick access to orders",
-      view: "orders",
-      name: "Tire Rotation",
-      description: "Rotate tires to ensure even wear",
-    },
-
-    {
-      id: 5,
-      names: "Add Employee",
-      descriptions: "Add a new employee",
-      view: "add-employee",
-      name: "Battery Service",
-      description: "Battery check, charging system analysis and replacement",
-    },
-    {
-      id: 6,
-      names: "All Employees",
-      descriptions: "List all employees",
-      view: "employees",
-      name: "AC Recharge",
-      description: "Air conditioning system diagnostic and refrigerant refill",
-    },
-    {
-      id: 7,
-      names: "Add Customer",
-      descriptions: "Add new customer",
-      view: "add-customer",
-      name: "Wheel Alignment",
-      description: "Computerized wheel alignment for better handling",
-    },
-    {
-      id: 8,
-      names: "All Customers",
-      descriptions: "List all customers",
-      view: "customers",
-      name: "Suspension",
-      description: "Struts, shocks, and suspension component repair",
-    },
-    {
-      id: 9,
-      names: "All Services",
-      descriptions: "List all services",
-      view: "services",
-      name: "Detailing",
-      description: "Complete interior and exterior professional detailing",
-    },
-  ]);
-
+  // Orders state (populated by backend)
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState<string>("");
 
+  // Inventory remains mock (UI expects it)
   const [inventory, setInventory] = useState<InventoryItem[]>([
     {
       id: 1,
@@ -237,43 +98,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       price: 89.99,
       minStockLevel: 4,
     },
-    {
-      id: 4,
-      name: "Air Filter",
-      partNumber: "AIR-FLT-GEN",
-      category: "Engine",
-      quantity: 20,
-      price: 12.99,
-      minStockLevel: 8,
-    },
-    {
-      id: 5,
-      name: "Spark Plug Iridium",
-      partNumber: "SPK-NGK-900",
-      category: "Engine",
-      quantity: 4,
-      price: 18.5,
-      minStockLevel: 12,
-    },
   ]);
 
-  // --- Selection State for Editing ---
+  // --- Selection State for Editing / Viewing ---
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(null);
   const [viewingEmployee, setViewingEmployee] = useState<Employee | null>(null);
 
-  // --- Actions ---
+  // --- Local actions (creating/updating local-only state when appropriate) ---
 
-  // Employee Actions
   const handleAddEmployee = (empData: Omit<Employee, "id" | "addedDate">) => {
     const newEmp: Employee = {
       ...empData,
       id: Date.now(),
       addedDate: new Date().toISOString().split("T")[0],
     };
-    setEmployees([...employees, newEmp]);
+    setEmployees((prev) => [...prev, newEmp]);
     setCurrentView("employees");
   };
 
@@ -286,33 +128,33 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     empData: Omit<Employee, "id" | "addedDate">
   ) => {
     if (!editingEmployee) return;
-    setEmployees(
-      employees.map((e) =>
-        e.id === editingEmployee.id ? { ...e, ...empData } : e
-      )
+    setEmployees((prev) =>
+      prev.map((e) => (e.id === editingEmployee.id ? { ...e, ...empData } : e))
     );
     setEditingEmployee(null);
     setCurrentView("employees");
   };
+
   const handleViewEmployee = (emp: Employee) => {
     setViewingEmployee(emp);
     setCurrentView("employee-detail");
   };
+
   const handleDeleteEmployee = (id: number) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
-      setEmployees(employees.filter((e) => e.id !== id));
+      setEmployees((prev) => prev.filter((e) => e.id !== id));
     }
   };
 
-  // Customer Actions
+  // Customer actions (local create/update kept as mock until you add CRUD endpoints)
   const handleAddCustomer = (custData: Omit<Customer, "id" | "addedDate">) => {
     const newCust: Customer = {
       ...custData,
       id: Date.now(),
       addedDate: new Date().toISOString().split("T")[0],
-      hash: Math.random().toString(36).substring(7),
+      hash: Math.random().toString(36).substring(2, 9),
     };
-    setCustomers([...customers, newCust]);
+    setCustomers((prev) => [...prev, newCust]);
     setCurrentView("customers");
   };
 
@@ -320,18 +162,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingCustomer(cust);
     setCurrentView("edit-customer");
   };
+
   const handleViewCustomer = (cust: Customer) => {
     setViewingCustomer(cust);
     setCurrentView("customer-detail");
   };
+
   const handleUpdateCustomer = (
     custData: Omit<Customer, "id" | "addedDate">
   ) => {
     if (!editingCustomer) return;
-    setCustomers(
-      customers.map((c) =>
-        c.id === editingCustomer.id ? { ...c, ...custData } : c
-      )
+    setCustomers((prev) =>
+      prev.map((c) => (c.id === editingCustomer.id ? { ...c, ...custData } : c))
     );
     setEditingCustomer(null);
     setCurrentView("customers");
@@ -339,96 +181,116 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleDeleteCustomer = (id: number) => {
     if (window.confirm("Are you sure you want to delete this customer?")) {
-      setCustomers(customers.filter((c) => c.id !== id));
+      setCustomers((prev) => prev.filter((c) => c.id !== id));
     }
   };
 
-  // Service Actions
-  // const addService = (srv: Omit<Service, "id">) => {
-  //   setServices([...services, { ...srv, id: Date.now() }]);
-  // };
-
-  // const updateService = (id: number, srv: Omit<Service, "id">) => {
-  //   setServices(services.map((s) => (s.id === id ? { ...s, ...srv } : s)));
-  // };
-
-  // const deleteService = (id: number) => {
-  //   if (window.confirm("Are you sure you want to delete this service?")) {
-  //     setServices(services.filter((s) => s.id !== id));
-  //   }
-  // };
-
-  // Vehicle & Order Actions
+  // Vehicle & Order actions (vehicles may be created locally until you add endpoints)
   const addVehicle = (veh: Omit<Vehicle, "id">) => {
-    setVehicles([...vehicles, { ...veh, id: Date.now() }]);
+    setVehicles((prev) => [...prev, { ...veh, id: Date.now() }]);
   };
 
-  // Fetch orders from backend
-  const fetchOrders = useCallback(async () => {
+  // ---------- Backend integration: fetch normalized data ----------
+  const fetchAllData = useCallback(async () => {
     setOrdersLoading(true);
     setOrdersError("");
     try {
-      const data = await getOrdersAPI();
-      setOrders(data);
+      // getAllDataAPI returns { orders, customers, vehicles, employees }
+      const {
+        orders: fetchedOrders,
+        customers: fetchedCustomers,
+        vehicles: fetchedVehicles,
+        employees: fetchedEmployees,
+      } = await getAllDataAPI();
+
+      // Orders
+      setOrders(fetchedOrders);
+
+      // Merge backend customers into local customers state (backend wins)
+      setCustomers((prev) => {
+        const map = new Map(prev.map((c) => [c.id, c]));
+        for (const c of fetchedCustomers) map.set(c.id, c);
+        return Array.from(map.values());
+      });
+
+      // Merge vehicles
+      setVehicles((prev) => {
+        const map = new Map(prev.map((v) => [v.id, v]));
+        for (const v of fetchedVehicles) map.set(v.id, v);
+        return Array.from(map.values());
+      });
+
+      // Merge employees
+      setEmployees((prev) => {
+        const map = new Map(prev.map((e) => [e.id, e]));
+        for (const e of fetchedEmployees) map.set(e.id, e);
+        return Array.from(map.values());
+      });
+
+      // Optionally get services from backend if provided by API (Part 2 will add)
+      // For now services can be left as-is or updated by later API call.
     } catch (err: any) {
-      setOrdersError(err.message || "Failed to fetch orders");
-      console.error("Failed to fetch orders:", err);
+      console.error("Failed to fetch orders or related data:", err);
+      setOrdersError(err?.message || "Failed to fetch orders");
     } finally {
       setOrdersLoading(false);
     }
   }, []);
 
-  // Fetch orders on mount
   useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+    fetchAllData();
+  }, [fetchAllData]);
 
+  // Called after CreateOrder component creates the order on the server
   const addOrder = async (ord: Omit<Order, "id" | "date" | "status">) => {
-    // Order is already created via API in CreateOrder component
-    // Just refresh the orders list
-    await fetchOrders();
+    // CreateOrder usually calls createOrder API itself. We just refresh.
+    await fetchAllData();
     setCurrentView("orders");
   };
+
   const handleEditOrder = (order: Order) => {
     setEditingOrder(order);
-    setCurrentView("edit-order"); // or whatever your page name is
+    setCurrentView("edit-order");
   };
+
   const handleUpdateOrder = (ord: Omit<Order, "id" | "date" | "hash">) => {
     if (!editingOrder) return;
-    setOrders(
-      orders.map((e) => (e.id === editingOrder.id ? { ...e, ...ord } : e))
+    setOrders((prev) =>
+      prev.map((e) => (e.id === editingOrder.id ? { ...e, ...ord } : e))
     );
     setEditingOrder(null);
     setCurrentView("orders");
   };
-  const updateOrderStatus = async (orderId: number, status: Order["status"]) => {
-    // Status is already updated via API in OrdersList component
-    // Just refresh the orders list
-    await fetchOrders();
+
+  const updateOrderStatus = async (
+    orderId: number,
+    status: Order["status"]
+  ) => {
+    // OrdersList.update will call updateOrderStatus API; refresh local state afterwards
+    await fetchAllData();
   };
 
-  // Inventory Actions
+  // Inventory actions (unchanged)
   const addInventoryItem = (item: Omit<InventoryItem, "id">) => {
-    setInventory([...inventory, { ...item, id: Date.now() }]);
+    setInventory((prev) => [...prev, { ...item, id: Date.now() }]);
   };
 
   const updateInventoryItem = (
     id: number,
     itemData: Partial<InventoryItem>
   ) => {
-    setInventory(
-      inventory.map((i) => (i.id === id ? { ...i, ...itemData } : i))
+    setInventory((prev) =>
+      prev.map((i) => (i.id === id ? { ...i, ...itemData } : i))
     );
   };
 
   const deleteInventoryItem = (id: number) => {
     if (window.confirm("Delete this inventory item?")) {
-      setInventory(inventory.filter((i) => i.id !== id));
+      setInventory((prev) => prev.filter((i) => i.id !== id));
     }
   };
 
-  // --- Navigation ---
-
+  // --- Navigation Menu (unchanged) ---
   const menuItems = [
     {
       id: "dashboard",
@@ -446,7 +308,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     { id: "customers", label: "Customers", icon: <Users size={18} /> },
     { id: "services", label: "Services", icon: <Wrench size={18} /> },
   ];
-const role = localStorage.getItem("role");
+
+  const role = localStorage.getItem("role");
   const userId = Number(localStorage.getItem("userId"));
   useEffect(() => {
     if (role === "Employee") {
@@ -464,8 +327,7 @@ const role = localStorage.getItem("role");
         setCurrentView("customer-detail");
       }
     }
-  }, []);
-
+  }, [employees, customers, role, userId]);
 
   const renderView = () => {
     switch (currentView) {
@@ -495,7 +357,9 @@ const role = localStorage.getItem("role");
           return <p className="text-center py-10">Loading orders...</p>;
         }
         if (ordersError) {
-          return <p className="text-center py-10 text-red-500">{ordersError}</p>;
+          return (
+            <p className="text-center py-10 text-red-500">{ordersError}</p>
+          );
         }
         return (
           <OrdersList
@@ -526,7 +390,7 @@ const role = localStorage.getItem("role");
             vehicles={vehicles}
             services={services}
             employees={employees}
-            onSubmit={handleUpdateOrder} // ✔ CORRECT (expects Order)
+            onSubmit={handleUpdateOrder}
             onAddVehicle={addVehicle}
             initialData={editingOrder || undefined}
             isEditing
@@ -542,14 +406,14 @@ const role = localStorage.getItem("role");
           />
         );
       case "employees":
-         return (
-           <EmployeesList
-             employees={employees}
-             onEdit={handleEditEmployee}
-             onDelete={handleDeleteEmployee}
-             onView={handleViewEmployee} // <-- ADD THIS
-           />
-         );
+        return (
+          <EmployeesList
+            employees={employees}
+            onEdit={handleEditEmployee}
+            onDelete={handleDeleteEmployee}
+            onView={handleViewEmployee}
+          />
+        );
       case "add-employee":
         return <AddEmployee onSubmit={handleAddEmployee} />;
       case "edit-employee":
@@ -576,7 +440,7 @@ const role = localStorage.getItem("role");
             employees={employees}
             onEdit={handleEditEmployee}
             onDelete={handleDeleteEmployee}
-            onView={handleViewEmployee} // <-- ADD THIS TOO
+            onView={handleViewEmployee}
           />
         );
       case "customers":
@@ -619,10 +483,10 @@ const role = localStorage.getItem("role");
       case "services":
         return (
           <ServicesManager
-            // services={services}
-            // onAdd={addService}
-            // onUpdate={updateService}
-            // onDelete={deleteService}
+          // services={services}
+          // onAdd={addService}
+          // onUpdate={updateService}
+          // onDelete={deleteService}
           />
         );
       default:
@@ -648,7 +512,7 @@ const role = localStorage.getItem("role");
         ></div>
       )}
 
-      {/* Top Header Mobile - Styled to match main theme but for admin */}
+      {/* Top Header Mobile */}
       <header className="lg:hidden h-16 bg-white shadow-md flex items-center justify-between px-4 shrink-0 sticky top-0 z-40 relative">
         <button
           onClick={() => setMobileMenuOpen(true)}
@@ -661,9 +525,6 @@ const role = localStorage.getItem("role");
             <span className="text-brand-red">Admin</span> Panel
           </span>
         </div>
-        {/* <div className="w-8 h-8 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs shadow-sm">
-          
-        </div> */}
 
         {/* Red/Blue Bottom Border */}
         <div className="absolute bottom-0 left-0 w-full h-1 flex">
@@ -692,7 +553,6 @@ const role = localStorage.getItem("role");
                   <span className="text-brand-red">አቤ</span> ጋራዥ
                 </h2>
               </div>
-              {/* Logo Underline for sidebar (matches main header style) */}
               <div className="h-1 w-full bg-gray-800 mt-1 rounded-full overflow-hidden flex">
                 <div className="h-full w-1/2 bg-white"></div>
                 <div className="h-full w-1/2 bg-brand-red"></div>

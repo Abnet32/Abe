@@ -31,7 +31,9 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
     null
   );
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
-  const [selectedServices, setSelectedServices] = useState<(number | string)[]>([]);
+  const [selectedServices, setSelectedServices] = useState<(number | string)[]>(
+    []
+  );
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -96,7 +98,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
 
       // Call backend API
       const createdOrder = await createOrderAPI(orderData);
-      
+
       // Call parent callback with transformed data
       onSubmit({
         customerId: Number(selectedCustomer.id),
@@ -112,11 +114,14 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
       setSelectedServices([]);
       setDescription("");
       setSearchTerm("");
-      
+
       alert("Order created successfully!");
     } catch (error: any) {
       console.error("Failed to create order:", error);
-      alert(error.response?.data?.message || "Failed to create order. Please try again.");
+      alert(
+        error.response?.data?.message ||
+          "Failed to create order. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

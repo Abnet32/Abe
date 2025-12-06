@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/api/service.ts
 import type { Service } from "../types.ts";
 
@@ -7,7 +8,9 @@ const API_URL = "http://localhost:5000/api/services"; // adjust if needed
 const transform = (s: any): Service => ({
   id: s._id,
   name: s.service_name,
-   description: s.service_description,
+  description: s.service_description,
+  names: "",
+  descriptions: ""
 });
 
 export const getServices = async (): Promise<Service[]> => {
