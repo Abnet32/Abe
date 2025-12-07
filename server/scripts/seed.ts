@@ -1,20 +1,20 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import connectDB from "../configs/db.ts";
+import connectDB from "../configs/db";
 
-import Employee from "../models/Employee.ts";
-import EmployeeInfo from "../models/EmployeeInfo.ts";
-import EmployeePass from "../models/EmployeePass.ts";
-import CompanyRole from "../models/CompanyRole.ts";
-import EmployeeRole from "../models/EmployeeRole.ts";
-import CustomerIdentifier from "../models/CustomerIdentifier.ts";
-import CustomerInfo from "../models/CustomerInfo.ts";
-import CommonService from "../models/CommonService.ts";
-import Vehicle from "../models/Vehicle.ts";
-import Order from "../models/Order.ts";
-import OrderInfo from "../models/OrderInfo.ts";
-import OrderService from "../models/OrderService.ts";
+import Employee from "../models/Employee";
+import EmployeeInfo from "../models/EmployeeInfo";
+import EmployeePass from "../models/EmployeePass";
+import CompanyRole from "../models/CompanyRole";
+import EmployeeRole from "../models/EmployeeRole";
+import CustomerIdentifier from "../models/CustomerIdentifier";
+import CustomerInfo from "../models/CustomerInfo";
+import CommonService from "../models/CommonService";
+import Vehicle from "../models/Vehicle";
+import Order from "../models/Order";
+import OrderInfo from "../models/OrderInfo";
+import OrderService from "../models/OrderService";
 
 import bcrypt from "bcryptjs";
 

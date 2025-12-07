@@ -1,4 +1,4 @@
-// backend/routes/serviceRoutes.ts
+// backend/routes/serviceRoutes
 import express from "express";
 import {
   getAllServices,
@@ -6,7 +6,7 @@ import {
   createService,
   updateService,
   deleteService,
-} from "../controllers/serviceController.ts";
+} from "../controllers/serviceController";
 
 const router = express.Router();
 

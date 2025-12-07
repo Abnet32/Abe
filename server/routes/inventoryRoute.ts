@@ -5,7 +5,7 @@ import {
   createInventoryItem,
   updateInventoryItem,
   deleteInventoryItem,
-} from "../controllers/inventoryController.ts";
+} from "../controllers/inventoryController";
 
 const router = express.Router();
 

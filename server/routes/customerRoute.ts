@@ -4,7 +4,7 @@ import {
   getAllCustomers,
   customerRegister,
   updateCustomer
-} from "../controllers/customerController.ts";
+} from "../controllers/customerController";
 
 const router = express.Router();
 
