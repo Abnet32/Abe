@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   useLocation,
   useNavigate,
 } from "react-router-dom";
@@ -37,7 +35,7 @@ const AppWrapper: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [currentView, setCurrentView] = useState<ViewState>("home");
-  const [scrollTarget, setScrollTarget] = useState<string | null>(null);
+  const [, setScrollTarget] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInitialMessage, setChatInitialMessage] = useState<string>("");
 

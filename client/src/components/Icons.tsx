@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+ 
 import {
-  Wrench,
   Settings,
   Disc,
-  Battery,
   Droplet,
   Gauge,
   Car,
-  ChevronRight,
 } from "lucide-react";
 
 export const IconPerformance = () => (

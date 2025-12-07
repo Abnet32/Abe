@@ -61,7 +61,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [services, setServices] = useState<Service[]>([]);
+  const [services] = useState<Service[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState<string>("");
@@ -187,7 +187,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     fetchAllData();
   }, [fetchAllData]);
 
-  const addOrder = async (ord: Omit<Order, "id" | "date" | "status">) => {
+  const addOrder = async () => {
     await fetchAllData();
     setCurrentView("orders");
   };
@@ -204,9 +204,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setCurrentView("orders");
   };
   const updateOrderStatus = async (
-    orderId: number,
-    status: Order["status"]
-  ) => {
+      ) => {
     await fetchAllData();
   };
 
