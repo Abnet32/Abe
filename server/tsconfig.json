@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2022",
-    "outDir": "dist",
-    "rootDir": ".",
+    "target": "es2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": false,
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "./dist"
   },
-  "include": ["server.ts", "models/**/*", "configs/**/*", "scripts/**/*"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }
