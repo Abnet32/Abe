@@ -1,40 +1,26 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Header from "../client/src/components/Header";
-import Hero from "../client/src/components/Hero";
-import About from "../client/src/components/About";
-import Services from "../client/src/components/Services";
-import QualitySection from "../client/src/components/QualitySection";
-import WhyChooseUs from "../client/src/components/WhyChooseUs";
-import LeaderBanner from "../client/src/components/LeaderBanner";
-import Footer from "../client/src/components/Footer";
-import ChatWidget from "../client/src/components/ChatWidget";
-
-interface User {
-  token: string;
-  role: string;
-}
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Services from "@/components/Services";
+import QualitySection from "@/components/QualitySection";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import LeaderBanner from "@/components/LeaderBanner";
+import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
+import { authClient } from "@/lib/auth-client";
 
 export default function HomePage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const { data: session } = authClient.useSession();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInitialMessage, setChatInitialMessage] = useState("");
 
-  useEffect(() => {
-    const token = window.localStorage.getItem("token");
-    const role = window.localStorage.getItem("role");
-    if (token && role) {
-      setUser({ token, role });
-    }
-  }, []);
-
   const handleLogout = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("role");
-    setUser(null);
+    void authClient.signOut();
     router.push("/");
   };
 
@@ -79,7 +65,7 @@ export default function HomePage() {
       <Header
         currentView="home"
         onNavigate={handleNavigate}
-        isLoggedIn={!!user}
+        isLoggedIn={!!session}
         onLogout={handleLogout}
       />
 

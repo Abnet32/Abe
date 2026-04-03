@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import AboutPage from "../../client/src/components/AboutPage";
-import Header from "../../client/src/components/Header";
-import Footer from "../../client/src/components/Footer";
+import AboutPage from "@/components/AboutPage";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function AboutRoutePage() {
   const router = useRouter();

@@ -1,23 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { getDashboardSummary } from "@/lib/server/controllers/orderController";
+import { auth } from "@/lib/server/middleware/authMiddleware";
+import { adminOrEmployee } from "@/lib/server/middleware/roleMiddleware";
+import { runRoute } from "@/lib/server/routeRunner";
 
-const BACKEND_BASE_URL =
-  process.env.BACKEND_BASE_URL || "http://localhost:5500/api";
-
-export async function GET() {
-  try {
-    const response = await fetch(
-      `${BACKEND_BASE_URL}/orders/dashboard/summary`,
-      {
-        cache: "no-store",
-      },
-    );
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
-  } catch (error) {
-    console.error("Dashboard summary proxy failed:", error);
-    return NextResponse.json(
-      { message: "Failed to load dashboard summary" },
-      { status: 500 },
-    );
-  }
+export async function GET(request: NextRequest) {
+  return runRoute(request, {}, getDashboardSummary, [auth, adminOrEmployee]);
 }

@@ -2,22 +2,26 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { AdminDashboard } from "../../client/src/components/AdminDashboard";
-import type { AdminView } from "../../client/src/types";
+import { AdminDashboard } from "@/components/AdminDashboard";
+import type { AdminView } from "@/types";
+import { authClient } from "@/lib/auth-client";
 
 export default function AdminPage() {
   const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
   const [isAuthorized, setIsAuthorized] = React.useState(false);
 
   useEffect(() => {
-    const role = window.localStorage.getItem("role");
-    if ((role || "").toLowerCase() !== "admin") {
-      router.push("/login");
+    const role = String(session?.user.role || "").toLowerCase();
+    if (!session || (role !== "admin" && role !== "employee")) {
+      if (!isPending) {
+        router.push("/login");
+      }
       return;
     }
 
     setIsAuthorized(true);
-  }, [router]);
+  }, [isPending, router, session]);
 
   const handleNavigate = (view: AdminView, sectionId?: string) => {
     const pathMap: Record<AdminView, string> = {
@@ -55,8 +59,7 @@ export default function AdminPage() {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("role");
+    void authClient.signOut();
     router.push("/");
   };
 

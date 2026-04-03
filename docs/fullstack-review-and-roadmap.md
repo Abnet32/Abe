@@ -139,11 +139,11 @@ This document captures:
 ## Required Environment Variables
 
 - `MONGODB_URL`
-- `JWT_SECRET`
-- `PORT` (optional default exists)
-- `CORS_ORIGINS` (comma-separated in non-local environments)
+- `BETTER_AUTH_URL`
+- `BETTER_AUTH_SECRET`
+- `NEXT_PUBLIC_GEMINI_API_KEY` (optional)
 
 ## Change Management Notes
 
 - Because admin authorization was added to many CRUD routes, ensure admin login is used before accessing dashboard data.
-- Ensure frontend `.env` contains `VITE_BASE_API_URL` matching server API host (example: `http://localhost:3001/api`).
+- Ensure application `.env` contains Better Auth variables for local/dev domains.

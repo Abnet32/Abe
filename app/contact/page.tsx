@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import ContactPage from "../../client/src/components/ContactPage";
-import Header from "../../client/src/components/Header";
-import Footer from "../../client/src/components/Footer";
+import ContactPage from "@/components/ContactPage";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function ContactRoutePage() {
   const router = useRouter();

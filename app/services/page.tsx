@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import ServicesPage from "../../client/src/components/ServicesPage";
-import Header from "../../client/src/components/Header";
-import Footer from "../../client/src/components/Footer";
+import ServicesPage from "@/components/ServicesPage";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function ServicesRoutePage() {
   const router = useRouter();
