@@ -46,15 +46,17 @@ import AppointmentCalendar from "./admin/AppointmentCalendar";
 import Footer from "./Footer";
 
 interface AdminDashboardProps {
+  initialView?: AdminView;
   onNavigate: (view: AdminView, sectionId?: string) => void;
   onLogout: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
+  initialView = "dashboard",
   onNavigate,
   onLogout,
 }) => {
-  const [currentView, setCurrentView] = useState<AdminView>("dashboard");
+  const [currentView, setCurrentView] = useState<AdminView>(initialView);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Backend-driven state
@@ -73,77 +75,42 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(null);
   const [viewingEmployee, setViewingEmployee] = useState<Employee | null>(null);
 
-  // --- Local actions ---
-  const handleAddEmployee = (empData: Omit<Employee, "id" | "addedDate">) => {
-    const newEmp: Employee = {
-      ...empData,
-      id: Date.now(),
-      addedDate: new Date().toISOString().split("T")[0],
-    };
-    setEmployees((prev) => [...prev, newEmp]);
-    setCurrentView("employees");
+  const navigateTo = (view: AdminView, sectionId?: string) => {
+    setCurrentView(view);
+    onNavigate(view, sectionId);
+  };
+
+  useEffect(() => {
+    setCurrentView(initialView);
+  }, [initialView]);
+
+  const handleEmployeeDone = async (nextView: AdminView = "employees") => {
+    await fetchAllData();
+    navigateTo(nextView);
+  };
+
+  const handleCustomerDone = async (nextView: AdminView = "customers") => {
+    await fetchAllData();
+    navigateTo(nextView);
   };
 
   const handleEditEmployee = (emp: Employee) => {
     setEditingEmployee(emp);
-    setCurrentView("edit-employee");
-  };
-  const handleUpdateEmployee = (
-    empData: Omit<Employee, "id" | "addedDate">,
-  ) => {
-    if (!editingEmployee) return;
-    setEmployees((prev) =>
-      prev.map((e) => (e.id === editingEmployee.id ? { ...e, ...empData } : e)),
-    );
-    setEditingEmployee(null);
-    setCurrentView("employees");
-  };
-  const handleViewEmployee = (emp: Employee) => {
-    setViewingEmployee(emp);
-    setCurrentView("employee-detail");
-  };
-  const handleDeleteEmployee = (id: string | number) => {
-    const numId = typeof id === "string" ? Number(id) : id;
-    if (Number.isNaN(Number(numId))) return;
-    if (window.confirm("Are you sure you want to delete this employee?"))
-      setEmployees((prev) => prev.filter((e) => e.id !== numId));
+    navigateTo("edit-employee");
   };
 
-  const handleAddCustomer = (custData: Omit<Customer, "id" | "addedDate">) => {
-    const newCust: Customer = {
-      ...custData,
-      id: Date.now(),
-      addedDate: new Date().toISOString().split("T")[0],
-      hash: Math.random().toString(36).substring(2, 9),
-    };
-    setCustomers((prev) => [...prev, newCust]);
-    setCurrentView("customers");
+  const handleViewEmployee = (emp: Employee) => {
+    setViewingEmployee(emp);
+    navigateTo("employee-detail");
   };
+
   const handleEditCustomer = (cust: Customer) => {
     setEditingCustomer(cust);
-    setCurrentView("edit-customer");
+    navigateTo("edit-customer");
   };
   const handleViewCustomer = (cust: Customer) => {
     setViewingCustomer(cust);
-    setCurrentView("customer-detail");
-  };
-  const handleUpdateCustomer = (
-    custData: Omit<Customer, "id" | "addedDate">,
-  ) => {
-    if (!editingCustomer) return;
-    setCustomers((prev) =>
-      prev.map((c) =>
-        c.id === editingCustomer.id ? { ...c, ...custData } : c,
-      ),
-    );
-    setEditingCustomer(null);
-  };
-
-  const handleDeleteCustomer = (id: string | number) => {
-    const numId = typeof id === "string" ? Number(id) : id;
-    if (Number.isNaN(Number(numId))) return;
-    if (window.confirm("Are you sure you want to delete this customer?"))
-      setCustomers((prev) => prev.filter((c) => c.id !== numId));
+    navigateTo("customer-detail");
   };
 
   const addVehicle = (veh: Omit<Vehicle, "id">) =>
@@ -191,11 +158,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const addOrder = async () => {
     await fetchAllData();
-    setCurrentView("orders");
+    navigateTo("orders");
   };
   const handleEditOrder = (order: Order) => {
     setEditingOrder(order);
-    setCurrentView("edit-order");
+    navigateTo("edit-order");
   };
   const handleUpdateOrder = (ord: Omit<Order, "status" | "id" | "date">) => {
     if (!editingOrder) return;
@@ -203,7 +170,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       prev.map((e) => (e.id === editingOrder.id ? { ...e, ...ord } : e)),
     );
     setEditingOrder(null);
-    setCurrentView("orders");
+    navigateTo("orders");
   };
   const updateOrderStatus = async (_id: number, _status: Order["status"]) => {
     await fetchAllData();
@@ -252,7 +219,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const renderView = () => {
     switch (currentView) {
       case "dashboard":
-        return <DashboardHome setCurrentView={setCurrentView} />;
+        return <DashboardHome setCurrentView={navigateTo} />;
       case "overview":
         return (
           <DashboardOverview
@@ -291,7 +258,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             employees={employees}
             onSubmit={addOrder}
             onAddVehicle={addVehicle}
-            onAddCustomerClick={() => setCurrentView("add-customer")}
+            onAddCustomerClick={() => navigateTo("add-customer")}
           />
         );
       case "edit-order":
@@ -306,7 +273,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {...({
               initialData: editingOrder || undefined,
               isEditing: true,
-              onAddCustomerClick: () => setCurrentView("add-customer"),
+              onAddCustomerClick: () => navigateTo("add-customer"),
             } as any)}
           />
         );
@@ -327,27 +294,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {...({
               employees,
               onEdit: handleEditEmployee,
-              onDelete: handleDeleteEmployee,
               onView: handleViewEmployee,
             } as any)}
           />
         );
       case "add-employee":
-        return <AddEmployee {...({ onSubmit: handleAddEmployee } as any)} />;
+        return <AddEmployee onDone={() => handleEmployeeDone("employees")} />;
       case "edit-employee":
         return (
           <AddEmployee
-            {...({
-              onSubmit: handleUpdateEmployee,
-              initialData: editingEmployee
+            initialData={
+              editingEmployee
                 ? ({
                     ...editingEmployee,
                     id: String(editingEmployee.id),
                     password: editingEmployee.password ?? "",
                   } as any)
-                : undefined,
-              isEditing: true,
-            } as any)}
+                : undefined
+            }
+            isEditing
+            onDone={() => {
+              setEditingEmployee(null);
+              void handleEmployeeDone("employees");
+            }}
           />
         );
       case "employee-detail":
@@ -364,7 +333,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {...({
               employees,
               onEdit: handleEditEmployee,
-              onDelete: handleDeleteEmployee,
               onView: handleViewEmployee,
             } as any)}
           />
@@ -372,20 +340,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case "customers":
         return (
           <CustomersList
-            customers={customers}
             onEdit={handleEditCustomer}
-            onDelete={handleDeleteCustomer}
             onView={handleViewCustomer}
           />
         );
       case "add-customer":
-        return <AddCustomer onSubmit={handleAddCustomer} />;
+        return <AddCustomer onDone={() => handleCustomerDone("customers")} />;
       case "edit-customer":
         return (
           <AddCustomer
-            onSubmit={handleUpdateCustomer}
             initialData={editingCustomer || undefined}
             isEditing
+            onDone={() => {
+              setEditingCustomer(null);
+              void handleCustomerDone("customers");
+            }}
           />
         );
       case "customer-detail":
@@ -395,15 +364,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               customer: viewingCustomer,
               orders,
               vehicles,
-              onBack: () => setCurrentView("customers"),
+              onBack: () => navigateTo("customers"),
               onEdit: handleEditCustomer,
             } as any)}
           />
         ) : (
           <CustomersList
-            customers={customers}
             onEdit={handleEditCustomer}
-            onDelete={handleDeleteCustomer}
             onView={handleViewCustomer}
           />
         );
@@ -485,7 +452,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <button
                 key={item.id}
                 onClick={() => {
-                  setCurrentView(item.id as AdminView);
+                  navigateTo(item.id as AdminView);
                   setMobileMenuOpen(false);
                 }}
                 className={`w-full flex items-center gap-4 px-4 py-3 text-sm font-bold rounded-lg transition-colors ${
@@ -547,7 +514,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             onNavigate(view as AdminView, sectionId);
           } else {
             // Default to dashboard for non-AdminView values
-            setCurrentView("dashboard");
+            navigateTo("dashboard");
           }
         }}
         showAppointmentBanner={false}

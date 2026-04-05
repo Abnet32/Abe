@@ -16,12 +16,16 @@ import {
   updateInventoryItem,
   deleteInventoryItem,
 } from "@/lib/api/inventory";
+import { useToast } from "@/components/ui/ToastProvider";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
+import AppLoader from "@/components/ui/AppLoader";
 
 const InventoryManager: React.FC = () => {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,14 +35,22 @@ const InventoryManager: React.FC = () => {
     price: 0,
     minStockLevel: 5,
   });
+  const { showToast } = useToast();
 
   // ---------------- FETCH INVENTORY ----------------
   const fetchInventory = async () => {
+    setLoading(true);
     try {
       const data = await getInventory();
       setInventory(data);
     } catch (err) {
       console.error("Failed to fetch inventory:", err);
+      showToast(
+        `Failed to fetch inventory: ${getApiErrorMessage(err)}`,
+        "error",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,15 +97,18 @@ const InventoryManager: React.FC = () => {
             item.id === updated._id ? transformItem(updated) : item,
           ),
         );
+        showToast("Inventory item updated", "success");
       } else {
         const newItem = await addInventoryItem(payload);
         setInventory((prev) => [...prev, transformItem(newItem)]);
+        showToast("Inventory item added", "success");
       }
       setShowForm(false);
       resetForm(); // close form after save
     } catch (err) {
       setShowForm(false);
       console.error("Failed to save item:", err);
+      showToast(`Failed to save item: ${getApiErrorMessage(err)}`, "error");
     }
   };
 
@@ -120,8 +135,10 @@ const InventoryManager: React.FC = () => {
     try {
       await deleteInventoryItem(id);
       setInventory((prev) => prev.filter((item) => String(item.id) !== id)); // live update
+      showToast("Inventory item deleted", "success");
     } catch (err) {
       console.error("Failed to delete item:", err);
+      showToast(`Failed to delete item: ${getApiErrorMessage(err)}`, "error");
     }
   };
 
@@ -140,6 +157,8 @@ const InventoryManager: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {loading && <AppLoader label="Loading inventory..." />}
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
         <div>

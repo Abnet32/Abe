@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import type { Order, Customer, Vehicle, Employee } from "@/types";
 import { Edit, ExternalLink } from "lucide-react";
 import { updateOrderStatus as updateOrderStatusAPI } from "@/lib/api/order";
+import { useToast } from "@/components/ui/ToastProvider";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
 
 interface OrdersListProps {
   orders: Order[];
@@ -23,6 +25,7 @@ const OrdersList: React.FC<OrdersListProps> = ({
   onViewCustomer,
 }) => {
   const [updatingStatus, setUpdatingStatus] = useState<number | null>(null);
+  const { showToast } = useToast();
 
   const handleStatusUpdate = async (
     orderId: number | string,
@@ -40,9 +43,13 @@ const OrdersList: React.FC<OrdersListProps> = ({
       await updateOrderStatusAPI(String(orderId), nextStatus);
       // Call parent callback to update local state
       onUpdateStatus(Number(orderId), nextStatus);
+      showToast("Order status updated", "success", 2200);
     } catch (error) {
       console.error("Failed to update order status:", error);
-      alert("Failed to update order status. Please try again.");
+      showToast(
+        `Failed to update order status: ${getApiErrorMessage(error)}`,
+        "error",
+      );
     } finally {
       setUpdatingStatus(null);
     }

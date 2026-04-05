@@ -3,11 +3,12 @@ import React, { useState, useEffect } from "react";
 import type { Customer } from "@/types";
 import { Edit, ExternalLink, Search, CheckCircle } from "lucide-react";
 import { getCustomers } from "@/lib/api/Customer";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
+import AppLoader from "@/components/ui/AppLoader";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface CustomersListProps {
-  customers: Customer[];
   onEdit: (cust: Customer) => void;
-  onDelete: (id: number) => void;
   onView: (cust: Customer) => void;
 }
 
@@ -16,6 +17,8 @@ const CustomersList: React.FC<CustomersListProps> = ({ onEdit, onView }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
+  const { showToast } = useToast();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,12 +34,14 @@ const CustomersList: React.FC<CustomersListProps> = ({ onEdit, onView }) => {
         setCustomers(sorted);
         setLoading(false);
       } catch (err) {
-        setError("Failed to load customers");
+        const message = getApiErrorMessage(err);
+        setError(message);
+        showToast(`Failed to load customers: ${message}`, "error");
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [showToast]);
 
   const filteredCustomers = customers.filter(
     (c) =>
@@ -48,7 +53,7 @@ const CustomersList: React.FC<CustomersListProps> = ({ onEdit, onView }) => {
 
   const isSearching = searchTerm.trim().length > 0;
 
-  if (loading) return <p className="text-center py-10">Loading customers...</p>;
+  if (loading) return <AppLoader label="Loading customers..." />;
   if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
 
   return (

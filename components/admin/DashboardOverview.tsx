@@ -2,6 +2,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Users, ClipboardList, Wrench, TrendingUp } from "lucide-react";
 import { getDashboardSummary } from "@/lib/api/dashboard";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
+import AppLoader from "@/components/ui/AppLoader";
+import { useToast } from "@/components/ui/ToastProvider";
 import type {
   Order,
   Employee,
@@ -71,6 +74,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 }) => {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const loadSummary = async () => {
@@ -80,13 +84,17 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         setSummary(data);
       } catch (error) {
         console.error("Failed to load dashboard summary:", error);
+        showToast(
+          `Failed to load dashboard summary: ${getApiErrorMessage(error)}`,
+          "error",
+        );
       } finally {
         setLoading(false);
       }
     };
 
     loadSummary();
-  }, []);
+  }, [showToast]);
 
   const fallbackPendingOrders = useMemo(
     () =>
@@ -143,11 +151,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         <h3 className="text-2xl font-bold text-brand-blue font-heading mb-6">
           Recent Activity
         </h3>
-        {loading && (
-          <p className="text-gray-500 text-sm italic mb-4">
-            Loading summary...
-          </p>
-        )}
+        {loading && <AppLoader compact label="Loading summary..." />}
         <div className="space-y-4">
           {summary?.recentActivity?.length
             ? summary.recentActivity.map((activity) => (

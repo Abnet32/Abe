@@ -1,15 +1,40 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import type { AdminView } from "@/types";
 import { authClient } from "@/lib/auth-client";
 
 export default function AdminPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
   const [isAuthorized, setIsAuthorized] = React.useState(false);
+
+  const allowedViews: AdminView[] = [
+    "dashboard",
+    "overview",
+    "orders",
+    "new-order",
+    "edit-order",
+    "calendar",
+    "inventory",
+    "employees",
+    "add-employee",
+    "edit-employee",
+    "employee-detail",
+    "customers",
+    "add-customer",
+    "edit-customer",
+    "customer-detail",
+    "services",
+  ];
+
+  const requestedView = (searchParams.get("view") || "dashboard") as AdminView;
+  const initialView = allowedViews.includes(requestedView)
+    ? requestedView
+    : "dashboard";
 
   useEffect(() => {
     const role = String(session?.user.role || "").toLowerCase();
@@ -43,7 +68,7 @@ export default function AdminPage() {
       services: "/admin?view=services",
     };
 
-    if (view === "dashboard" || view === "overview") {
+    if (view === "dashboard") {
       router.push("/admin");
       return;
     }
@@ -65,5 +90,11 @@ export default function AdminPage() {
 
   if (!isAuthorized) return null;
 
-  return <AdminDashboard onNavigate={handleNavigate} onLogout={handleLogout} />;
+  return (
+    <AdminDashboard
+      initialView={initialView}
+      onNavigate={handleNavigate}
+      onLogout={handleLogout}
+    />
+  );
 }

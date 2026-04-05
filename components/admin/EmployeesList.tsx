@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Edit, Search, CheckCircle, ExternalLink } from "lucide-react";
 import type { Employee } from "@/types";
 import { getEmployees } from "@/lib/api/employee";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
+import AppLoader from "@/components/ui/AppLoader";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface EmployeesListProps {
   // employees: (EmployeeData & { id: string; addedDate: string })[];
@@ -21,6 +24,8 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
+  const { showToast } = useToast();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,12 +42,14 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
         setLoading(false);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        setError("Failed to load Employees");
+        const message = getApiErrorMessage(err);
+        setError(message);
+        showToast(`Failed to load employees: ${message}`, "error");
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [showToast]);
 
   const filteredEmployees = employees.filter(
     (c) =>
@@ -54,7 +61,7 @@ const EmployeesList: React.FC<EmployeesListProps> = ({
 
   const isSearching = searchTerm.trim().length > 0;
 
-  if (loading) return <p className="text-center py-10">Loading Employees...</p>;
+  if (loading) return <AppLoader label="Loading employees..." />;
   if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
 
   return (

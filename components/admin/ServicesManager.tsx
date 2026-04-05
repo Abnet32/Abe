@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from "react";
 import type { Service } from "@/types";
 import { Edit, Trash2 } from "lucide-react";
-import axios from "axios";
 import {
   getServices,
   addServiceAPI,
   updateServiceAPI,
   deleteServiceAPI,
 } from "@/lib/api/service";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
+import AppLoader from "@/components/ui/AppLoader";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface ServicesManagerProps {
   // Remove local handlers, we handle API inside now
@@ -19,37 +21,7 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const readErrorMessage = (error: unknown) => {
-    if (axios.isAxiosError(error)) {
-      const data = error.response?.data;
-      if (typeof data === "string") {
-        return data;
-      }
-      if (data && typeof data === "object") {
-        const message = (data as { message?: unknown }).message;
-        if (typeof message === "string" && message.trim()) {
-          return message;
-        }
-      }
-      if (error.code === "ECONNABORTED") {
-        return "Request timed out. Please try again.";
-      }
-      if (error.response?.status === 401) {
-        return "Your session has expired. Please log in again.";
-      }
-      if (error.response?.status === 503) {
-        return "Service temporarily unavailable. Please retry in a moment.";
-      }
-      return error.message;
-    }
-
-    if (error instanceof Error) {
-      return error.message;
-    }
-
-    return "Unexpected error";
-  };
+  const { showToast } = useToast();
 
   useEffect(() => {
     fetchServices();
@@ -62,7 +34,10 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
       setServices(data);
     } catch (error) {
       console.error(error);
-      alert(`Failed to fetch services: ${readErrorMessage(error)}`);
+      showToast(
+        `Failed to fetch services: ${getApiErrorMessage(error)}`,
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -87,11 +62,15 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
           formData as unknown as Omit<Service, "id">,
         );
         setServices((prev) => [...prev, added]);
+        showToast("Service created successfully", "success");
       }
       setFormData({ name: "", description: "" });
     } catch (error) {
       console.error(error);
-      alert(`Failed to save service: ${readErrorMessage(error)}`);
+      showToast(
+        `Failed to save service: ${getApiErrorMessage(error)}`,
+        "error",
+      );
     }
   };
 
@@ -108,9 +87,13 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
     try {
       await deleteServiceAPI(id);
       setServices((prev) => prev.filter((s) => s.id !== id));
+      showToast("Service deleted", "success");
     } catch (error) {
       console.error(error);
-      alert(`Failed to delete service: ${readErrorMessage(error)}`);
+      showToast(
+        `Failed to delete service: ${getApiErrorMessage(error)}`,
+        "error",
+      );
     }
   };
 
@@ -121,7 +104,7 @@ const ServicesManager: React.FC<ServicesManagerProps> = () => {
 
   return (
     <div className="space-y-12">
-      {loading && <p>Loading services...</p>}
+      {loading && <AppLoader label="Loading services..." />}
 
       <div className="space-y-4">
         {services.map((service) => (

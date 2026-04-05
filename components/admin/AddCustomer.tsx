@@ -3,14 +3,17 @@
 import React, { useState, useEffect } from "react";
 import type { Customer } from "@/types";
 import { addCustomer, updateCustomer } from "@/lib/api/Customer";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface AddCustomerProps {
-  onSubmit: (customer: Omit<Customer, "id" | "addedDate">) => void;
+  onDone: () => void;
   initialData?: Customer;
   isEditing?: boolean;
 }
 
 const AddCustomer: React.FC<AddCustomerProps> = ({
+  onDone,
   initialData,
   isEditing = false,
 }) => {
@@ -21,6 +24,7 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
     phone: "",
     active: true,
   });
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (initialData) {
@@ -39,10 +43,11 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
     try {
       if (isEditing && initialData) {
         await updateCustomer(String(initialData.id), formData); // convert id to string for API
-        alert("Customer updated successfully!");
+        showToast("Customer updated successfully", "success");
+        onDone();
       } else {
         await addCustomer(formData);
-        alert("Customer added successfully!");
+        showToast("Customer added successfully", "success");
         setFormData({
           firstName: "",
           lastName: "",
@@ -50,21 +55,10 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
           phone: "",
           active: true,
         });
+        onDone();
       }
     } catch (err: unknown) {
-      // support Axios-like error objects with a response, standard Error instances, and other values
-      if (typeof err === "object" && err !== null && "response" in err) {
-        const anyErr = err as any;
-        alert(
-          anyErr.response?.data?.message ??
-            anyErr.message ??
-            "Error adding customer",
-        );
-      } else if (err instanceof Error) {
-        alert(err.message);
-      } else {
-        alert(String(err) || "Error adding customer");
-      }
+      showToast(getApiErrorMessage(err), "error");
     }
   };
 

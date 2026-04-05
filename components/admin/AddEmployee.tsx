@@ -6,6 +6,8 @@ import {
   deleteEmployee,
   type EmployeeData,
 } from "@/lib/api/employee";
+import { useToast } from "@/components/ui/ToastProvider";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
 
 interface AddEmployeeProps {
   initialData?: EmployeeData & { id?: string };
@@ -31,6 +33,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
   const [employeeId, setEmployeeId] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({});
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   // Load data if editing
   useEffect(() => {
@@ -79,15 +82,15 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
     try {
       if (isEditing && employeeId) {
         await updateEmployee(employeeId, formData);
-        console.log("Employee updated");
+        showToast("Employee updated successfully", "success");
       } else {
         await addEmployee(formData);
-        console.log("Employee added");
+        showToast("Employee added successfully", "success");
       }
 
       onDone(); // refresh parent
     } catch (err) {
-      console.error("Failed to submit employee:", err);
+      showToast(`Failed to save employee: ${getApiErrorMessage(err)}`, "error");
     } finally {
       setLoading(false);
     }
@@ -101,9 +104,10 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({
 
     try {
       await deleteEmployee(employeeId);
+      showToast("Employee deleted successfully", "success");
       onDone();
     } catch (err) {
-      console.error("Delete failed:", err);
+      showToast(`Delete failed: ${getApiErrorMessage(err)}`, "error");
     }
   };
 

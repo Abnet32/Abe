@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import type { Customer, Vehicle, Service, Order, Employee } from "@/types";
 import { Search, CheckCircle, X } from "lucide-react";
 import { createOrder as createOrderAPI } from "@/lib/api/order";
+import { useToast } from "@/components/ui/ToastProvider";
+import { getApiErrorMessage } from "@/lib/api/errorMessage";
 
 interface CreateOrderProps {
   customers: Customer[];
@@ -34,6 +36,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
   );
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   // New Vehicle Form State
   const [showVehicleForm, setShowVehicleForm] = useState(false);
@@ -78,7 +81,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
 
   const handleSubmitOrder = async () => {
     if (!selectedCustomer || !selectedVehicle) {
-      alert("Please select a customer and vehicle");
+      showToast("Please select a customer and vehicle", "info");
       return;
     }
 
@@ -109,12 +112,12 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
       setDescription("");
       setSearchTerm("");
 
-      alert("Order created successfully!");
+      showToast("Order created successfully", "success");
     } catch (error: any) {
       console.error("Failed to create order:", error);
-      alert(
-        error.response?.data?.message ||
-          "Failed to create order. Please try again.",
+      showToast(
+        `Failed to create order: ${getApiErrorMessage(error)}`,
+        "error",
       );
     } finally {
       setIsSubmitting(false);
