@@ -12,4 +12,4 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-gitignore
+.next
