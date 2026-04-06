@@ -4,7 +4,7 @@ import { PlayButton } from "./Icons";
 import eight from "../assets/8.avif";
 
 const Hero: React.FC = () => {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handlePlayVideo = () => {
