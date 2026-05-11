@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import type { Order, Customer } from "@/types";
 import {
   ChevronLeft,
   ChevronRight,
   Calendar as CalendarIcon,
+  X,
 } from "lucide-react";
 
 interface AppointmentCalendarProps {
@@ -11,11 +12,58 @@ interface AppointmentCalendarProps {
   customers: Customer[];
 }
 
+interface CalendarNote {
+  id: string;
+  date: string;
+  title: string;
+  time?: string;
+  type: "plan" | "event";
+}
+
+interface NoteFormState {
+  title: string;
+  time: string;
+  type: "plan" | "event";
+}
+
+const CALENDAR_NOTES_STORAGE_KEY = "admin-calendar-notes";
+
 const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
   orders,
   customers,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [calendarNotes, setCalendarNotes] = useState<CalendarNote[]>([]);
+  const [selectedDateForNote, setSelectedDateForNote] = useState<string | null>(
+    null,
+  );
+  const [noteForm, setNoteForm] = useState<NoteFormState>({
+    title: "",
+    time: "",
+    type: "plan",
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const rawNotes = window.localStorage.getItem(CALENDAR_NOTES_STORAGE_KEY);
+      if (!rawNotes) return;
+      const parsed = JSON.parse(rawNotes) as CalendarNote[];
+      if (Array.isArray(parsed)) {
+        setCalendarNotes(parsed);
+      }
+    } catch (error) {
+      console.error("Failed to load calendar notes", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(
+      CALENDAR_NOTES_STORAGE_KEY,
+      JSON.stringify(calendarNotes),
+    );
+  }, [calendarNotes]);
 
   const daysInMonth = (date: Date) =>
     new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -32,6 +80,54 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
     );
   const goToToday = () => setCurrentDate(new Date());
 
+  const selectedDateLabel = useMemo(() => {
+    if (!selectedDateForNote) return "";
+    const date = new Date(`${selectedDateForNote}T00:00:00`);
+    return date.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }, [selectedDateForNote]);
+
+  const openNoteModal = (dateStr: string) => {
+    setSelectedDateForNote(dateStr);
+    setNoteForm({
+      title: "",
+      time: "",
+      type: "plan",
+    });
+  };
+
+  const closeNoteModal = () => {
+    setSelectedDateForNote(null);
+    setNoteForm({
+      title: "",
+      time: "",
+      type: "plan",
+    });
+  };
+
+  const addCalendarNote = () => {
+    if (!selectedDateForNote || !noteForm.title.trim()) return;
+
+    const newNote: CalendarNote = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      date: selectedDateForNote,
+      title: noteForm.title.trim(),
+      time: noteForm.time || undefined,
+      type: noteForm.type,
+    };
+
+    setCalendarNotes((prev) => [...prev, newNote]);
+    closeNoteModal();
+  };
+
+  const removeCalendarNote = (id: string) => {
+    setCalendarNotes((prev) => prev.filter((note) => note.id !== id));
+  };
+
   const getOrdersForDate = (day: number) => {
     const dateStr = `${currentDate.getFullYear()}-${String(
       currentDate.getMonth() + 1,
@@ -40,6 +136,11 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
       (o) => o.date === dateStr || o.estimatedCompletionDate === dateStr,
     );
   };
+
+  const getNotesForDate = (dateStr: string) =>
+    calendarNotes
+      .filter((note) => note.date === dateStr)
+      .sort((a, b) => (a.time || "").localeCompare(b.time || ""));
 
   const monthNames = [
     "January",
@@ -73,7 +174,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
           >
             <ChevronLeft size={20} />
           </button>
-          <div className="flex items-center gap-2 min-w-[160px] justify-center">
+          <div className="flex items-center gap-2 min-w-40 justify-center">
             <CalendarIcon size={18} className="text-brand-red" />
             <span className="font-bold text-brand-blue">
               {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
@@ -122,6 +223,10 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
           {Array.from({ length: daysInMonth(currentDate) }).map((_, i) => {
             const day = i + 1;
             const dayOrders = getOrdersForDate(day);
+            const dateStr = `${currentDate.getFullYear()}-${String(
+              currentDate.getMonth() + 1,
+            ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            const dayNotes = getNotesForDate(dateStr);
             const isToday =
               new Date().toDateString() ===
               new Date(
@@ -138,7 +243,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                 }`}
               >
                 <span
-                  className={`text-sm font-bold block mb-2 w-7 h-7 flex items-center justify-center rounded-full ${
+                  className={`text-sm font-bold mb-2 w-7 h-7 flex items-center justify-center rounded-full ${
                     isToday ? "bg-brand-red text-white" : "text-gray-700"
                   }`}
                 >
@@ -146,6 +251,33 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                 </span>
 
                 <div className="space-y-1 overflow-y-auto h-[calc(100%-2rem)] scrollbar-none">
+                  {dayNotes.map((note) => (
+                    <div
+                      key={note.id}
+                      className={`text-[10px] p-1.5 rounded border truncate group/note flex items-center gap-1 justify-between ${
+                        note.type === "plan"
+                          ? "bg-amber-50 border-amber-200 text-amber-800"
+                          : "bg-purple-50 border-purple-200 text-purple-800"
+                      }`}
+                    >
+                      <span className="truncate">
+                        {note.time ? `${note.time} ` : ""}
+                        <span className="font-bold capitalize">
+                          {note.type}:
+                        </span>{" "}
+                        {note.title}
+                      </span>
+                      <button
+                        onClick={() => removeCalendarNote(note.id)}
+                        className="opacity-0 group-hover/note:opacity-100 text-current hover:text-red-600 transition-opacity"
+                        title="Delete"
+                        aria-label="Delete plan or event"
+                      >
+                        <X size={10} />
+                      </button>
+                    </div>
+                  ))}
+
                   {dayOrders.map((order) => {
                     const customer = customers.find(
                       (c) => c.id === order.customerId,
@@ -169,7 +301,12 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                 </div>
 
                 {/* Add button on hover */}
-                <button className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 bg-brand-blue text-white p-1 rounded shadow transition-opacity">
+                <button
+                  onClick={() => openNoteModal(dateStr)}
+                  className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 bg-brand-blue text-white p-1 rounded shadow transition-opacity"
+                  title="Add plan or event"
+                  aria-label={`Add plan or event for day ${day}`}
+                >
                   <PlusIcon size={12} />
                 </button>
               </div>
@@ -177,6 +314,98 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
           })}
         </div>
       </div>
+
+      {selectedDateForNote && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button
+            onClick={closeNoteModal}
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close form"
+          />
+          <div className="relative w-full max-w-md bg-white rounded-xl shadow-xl p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-brand-blue">
+                Add Plan / Event
+              </h3>
+              <button
+                onClick={closeNoteModal}
+                className="p-1 rounded hover:bg-gray-100"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-600">{selectedDateLabel}</p>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">
+                  Type
+                </label>
+                <select
+                  value={noteForm.type}
+                  onChange={(e) =>
+                    setNoteForm((prev) => ({
+                      ...prev,
+                      type: e.target.value as NoteFormState["type"],
+                    }))
+                  }
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="plan">Plan</option>
+                  <option value="event">Event</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  value={noteForm.title}
+                  onChange={(e) =>
+                    setNoteForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  placeholder="e.g. Oil change follow-up"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">
+                  Time (optional)
+                </label>
+                <input
+                  type="time"
+                  value={noteForm.time}
+                  onChange={(e) =>
+                    setNoteForm((prev) => ({ ...prev, time: e.target.value }))
+                  }
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={closeNoteModal}
+                className="px-3 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={addCalendarNote}
+                disabled={!noteForm.title.trim()}
+                className="px-3 py-2 text-sm rounded-lg bg-brand-blue text-white disabled:opacity-60"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Legend */}
       <div className="flex gap-6 text-xs text-gray-600 justify-center">
@@ -191,6 +420,14 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-green-100 border border-green-200 rounded"></div>{" "}
           Completed
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-amber-50 border border-amber-200 rounded"></div>{" "}
+          Plan
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-purple-50 border border-purple-200 rounded"></div>{" "}
+          Event
         </div>
       </div>
     </div>
