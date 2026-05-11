@@ -29,7 +29,6 @@ const OrdersList: React.FC<OrdersListProps> = ({
   customers,
   vehicles,
   employees,
-  services,
   onEdit,
   onUpdateStatus,
   onViewCustomer,
