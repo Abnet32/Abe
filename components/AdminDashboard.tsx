@@ -3,6 +3,7 @@
 // src/components/AdminDashboard.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import { getAllData as getAllDataAPI } from "@/lib/api/order";
+import { getServices } from "@/lib/api/service";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -63,7 +64,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [services] = useState<Service[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState<string>("");
@@ -121,13 +122,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setOrdersLoading(true);
     setOrdersError("");
     try {
+      const [allData, fetchedServices] = await Promise.all([
+        getAllDataAPI(),
+        getServices(),
+      ]);
       const {
         orders: fetchedOrders,
         customers: fetchedCustomers,
         vehicles: fetchedVehicles,
         employees: fetchedEmployees,
-      } = await getAllDataAPI();
+      } = allData;
       setOrders(fetchedOrders);
+      setServices(fetchedServices);
 
       setCustomers((prev) => {
         const map = new Map(prev.map((c) => [c.id, c]));
@@ -244,6 +250,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             customers={customers}
             vehicles={vehicles}
             employees={employees}
+            services={services}
             onEdit={handleEditOrder}
             onUpdateStatus={updateOrderStatus}
             onViewCustomer={handleViewCustomer}
