@@ -104,10 +104,20 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     [orders],
   );
 
+  const usedServicesCount = useMemo(() => {
+    const uniqueServiceIds = new Set<number>();
+    for (const order of orders) {
+      for (const serviceId of order.serviceIds || []) {
+        uniqueServiceIds.add(serviceId);
+      }
+    }
+    return uniqueServiceIds.size;
+  }, [orders]);
+
   const totalOrders = summary?.totals.orders ?? orders.length;
   const pendingOrders = summary?.totals.pendingOrders ?? fallbackPendingOrders;
   const teamMembers = summary?.totals.employees ?? employees.length;
-  const activeServices = summary?.totals.activeServices ?? services.length;
+  const activeServices = services.length || summary?.totals.activeServices || 0;
 
   return (
     <div className="space-y-12">
@@ -145,6 +155,37 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           value={activeServices}
           icon={<Wrench />}
         />
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <h3 className="text-xl font-bold text-brand-blue font-heading mb-4">
+          Service Analytics
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-lg border border-gray-200 p-4 bg-gray-50">
+            <p className="text-xs uppercase tracking-wider text-gray-500 font-bold">
+              Catalog Services
+            </p>
+            <p className="text-3xl font-bold text-brand-blue mt-2">
+              {activeServices}
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+              Total active services available in your service list.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-gray-200 p-4 bg-gray-50">
+            <p className="text-xs uppercase tracking-wider text-gray-500 font-bold">
+              Used In Orders
+            </p>
+            <p className="text-3xl font-bold text-brand-blue mt-2">
+              {usedServicesCount}
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+              Unique services referenced by current orders.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
