@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 // @ts-ignore - Next.js handles global CSS imports.
 import "./globals.css";
 import { AppProviders } from "./providers";
-import icon from "@/public/icon.png";
+import icon from "@/public/repair-shop.png";
 
 export const metadata: Metadata = {
   title: "አቤ ጋራዥ ",
